@@ -77,14 +77,10 @@ jobs:
         run: |
           echo "=== GET /agentes ==="
           AGENTES=$(curl -s http://localhost:3000/agentes)
+          echo "$AGENTES" | jq -e '.agentes | type == "array"' > /dev/null
           COUNT=$(echo "$AGENTES" | jq '.agentes | length')
-          echo "Docentes encontrados: ${COUNT}"
-          test "$COUNT" -ge 1 || exit 1
-          echo "OK /agentes"
-
-      - name: Smoke test — Upload Excel (openpyxl)
-        if: false  # openpyxl no instalado por defecto, skip
-        run: echo "Excel test skipped (openpyxl not available)"
+          echo "Docentes encontrados: ${COUNT} (container fresco, 0 es OK)"
+          echo "OK /agentes (JSON valido)"
 
       - name: Stop container
         run: docker stop legajo-digital
