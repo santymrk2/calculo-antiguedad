@@ -2,12 +2,19 @@ import Bun from "bun";
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-const { PDFParse } = require("pdf-parse");
+// pdf-parse se importa bajo demanda (es lazy) porque depende de @napi-rs/canvas,
+// un módulo nativo que NO puede embeber bun build --compile.
+// El EXE arranca sin problemas; solo falla si se intenta procesar un PDF.
 import * as XLSX from "xlsx";
 
 // Configuración
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, "datos_locales");
+// En bun build --compile, __dirname apunta a un FS virtual (/$bunfs/root/).
+// Para datos persistentes usamos process.cwd() como fallback.
+const isCompiled = __dirname.startsWith("/$bunfs");
+const DATA_DIR =
+  process.env.DATA_DIR ||
+  path.join(isCompiled ? process.cwd() : __dirname, "datos_locales");
 const PORT = parseInt(process.env.PORT || "3000", 10);
 const HOST = process.env.HOST || "0.0.0.0";
 
@@ -442,7 +449,20 @@ async function handleProcessFile(request) {
     let periods = [];
 
     if (filename.endsWith(".pdf")) {
-      // Parsear PDF
+      // Parsear PDF (import lazy para no romper el EXE al iniciar)
+      let PDFParse;
+      try {
+        ({ PDFParse } = await import("pdf-parse"));
+      } catch (e) {
+        return new Response(
+          JSON.stringify({
+            error:
+              "El procesamiento de PDFs no está disponible en esta versión. " +
+              "Usá la versión Docker para procesar PDFs, o cargá un archivo Excel.",
+          }),
+          { status: 400, headers: { "Content-Type": "application/json" } },
+        );
+      }
       const parser = new PDFParse({ data: Buffer.from(buffer) });
       const pdfData = await parser.getText(); // Retorna { text: "..." }
       const text = pdfData.text;
@@ -698,8 +718,8 @@ const server = Bun.serve({
     // GET /
     if (pathname === "/" && request.method === "GET") {
       try {
-        const htmlPath = path.join(__dirname, "index.html");
-        const html = await Bun.file(htmlPath).text();
+        // Ruta relativa: Bun embebe el archivo en bun build --compile
+        const html = await Bun.file("index.html").text();
         return new Response(html, {
           headers: { "Content-Type": "text/html; charset=utf-8" },
         });
@@ -727,6 +747,9 @@ const server = Bun.serve({
     return new Response("Not Found", { status: 404 });
   },
 });
+
+// Asegurar que el directorio de datos existe (en EXE se crea en el CWD real)
+await fs.mkdir(DATA_DIR, { recursive: true }).catch(() => {});
 
 console.log(`✅ Servidor iniciado en http://${HOST === "0.0.0.0" ? "localhost" : HOST}:${PORT}`);
 console.log(`📁 Datos almacenados en: ${DATA_DIR}`);
