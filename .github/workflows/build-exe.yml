@@ -4,9 +4,9 @@
 # Builds standalone executables for Mac (ARM + Intel), Windows, and Linux
 # using `bun build --compile`.
 #
-# ⚠️  LIMITACIÓN: Los módulos nativos (pdf-parse con @napi-rs/canvas) NO
-#     funcionan en el EXE compilado. El EXE sirve para visualizar docentes
-#     existentes y cargar Excel, pero NO puede procesar PDFs.
+# ⚠️  LIMITACIÓN: El EXE no puede procesar PDFs (usa @napi-rs/canvas, módulo
+#     nativo que no se puede embeber). Sí funciona: HTML, Excel, cálculos,
+#     listado de docentes. Para PDFs usá Docker.
 # =============================================================================
 
 name: Build EXE

@@ -154,18 +154,26 @@ bun test-examples.js
 
 En cada release de GitHub se generan automáticamente ejecutables para:
 
-- `legajo-digital-macos-arm64` (Apple Silicon)
-- `legajo-digital-macos-x64` (Intel)
-- `legajo-digital-linux-x64`
+- `legajo-digital-linux-x64` (Linux)
+- `legajo-digital-macos-arm64` (macOS Apple Silicon)
+- `legajo-digital-macos-x64` (macOS Intel)
 - `legajo-digital-windows-x64.exe`
 
-> **Limitación**: El EXE no puede procesar PDFs porque `pdf-parse` usa módulos
-> nativos (`@napi-rs/canvas`) que no se incluyen en el binario compilado.
-> Para funcionalidad completa, usá Docker.
+El EXE funciona **completo** para: servir la interfaz HTML, procesar archivos
+Excel, listar docentes y calcular antigüedad. Los datos se guardan en
+`datos_locales/` junto al ejecutable.
 
-Para build manual:
+> **Limitación**: El EXE no puede procesar PDFs porque `pdf-parse` depende de
+> `@napi-rs/canvas`, un módulo nativo que `bun build --compile` no puede
+> embeber. Si intentás subir un PDF, el EXE devuelve un mensaje claro
+> indicando que usés Docker.
+>
+> Para funcionalidad completa (con PDFs) usá la **Opción A — Docker**.
+
+### Build manual (para testing)
+
 ```bash
-bun build --compile --target=bun-darwin-arm64 server.js --outfile legajo-digital
+bun build --compile --target bun-darwin-arm64 --outfile legajo-digital server.js
 ```
 
 ---
