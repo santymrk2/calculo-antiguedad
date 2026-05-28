@@ -1,13 +1,3 @@
-# =============================================================================
-# Legajo Digital — docker-compose.yml
-# =============================================================================
-# Usage:
-#   docker compose up -d         # Start in background
-#   docker compose down          # Stop
-#   docker compose logs -f       # Follow logs
-#   docker compose pull          # Update image
-# =============================================================================
-
 services:
   legajo-digital:
     build:
@@ -17,15 +7,11 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      # Persistent data stored on host machine
       - ./datos_locales:/app/datos_locales
     environment:
       - PORT=3000
       - HOST=0.0.0.0
-      # Optionally override data directory:
-      # - DATA_DIR=/custom/path
     restart: unless-stopped
-    # Health check is defined in Dockerfile
     labels:
       description: "Cálculo de Antigüedad Docente — PBA"
       version: "1.0.0"

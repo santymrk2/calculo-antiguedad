@@ -1,13 +1,3 @@
-# =============================================================================
-# Docker — Build and test on every push
-# =============================================================================
-# Builds the Docker image and runs a smoke test to verify:
-#   - Image builds successfully
-#   - Container starts
-#   - Health check passes
-#   - API endpoints respond correctly
-# =============================================================================
-
 name: Docker
 
 on:
@@ -57,30 +47,28 @@ jobs:
           echo "Esperando que el servidor responda..."
           for i in $(seq 1 15); do
             if curl -s http://localhost:3000/ > /dev/null 2>&1; then
-              echo "✅ Servidor listo!"
+              echo "Servidor listo!"
               break
             fi
             echo "  Intento $i/15..."
             sleep 2
           done
 
-      - name: Smoke test — HTML page
+      - name: Smoke test HTML
         run: |
           echo "=== GET / ==="
           HTTP_CODE=$(curl -s -o /tmp/index.html -w "%{http_code}" http://localhost:3000/)
           echo "Status: $HTTP_CODE"
           test "$HTTP_CODE" -eq 200 || exit 1
           grep -q "Legajo Digital" /tmp/index.html || exit 1
-          echo "✅ HTML OK"
+          echo "HTML OK"
 
-      - name: Smoke test — GET /agentes
+      - name: Smoke test API
         run: |
           echo "=== GET /agentes ==="
           AGENTES=$(curl -s http://localhost:3000/agentes)
-          echo "$AGENTES" | jq -e '.agentes | type == "array"' > /dev/null
-          COUNT=$(echo "$AGENTES" | jq '.agentes | length')
-          echo "Docentes encontrados: ${COUNT} (container fresco, 0 es OK)"
-          echo "OK /agentes (JSON valido)"
+          echo "$AGENTES" | python3 -c "import sys,json; d=json.load(sys.stdin); assert isinstance(d.get('agentes'),list); print(f'{len(d[\"agentes\"])} docentes')"
+          echo "API OK"
 
       - name: Stop container
         run: docker stop legajo-digital
@@ -89,7 +77,6 @@ jobs:
         if: failure()
         run: docker logs legajo-digital 2>&1 || true
 
-  # Optional: Push to GitHub Container Registry (only on main branch)
   push-to-ghcr:
     name: Push to GHCR
     needs: build-and-test

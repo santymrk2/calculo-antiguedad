@@ -1,9 +1,8 @@
-# =============================================================================
-# Legajo Digital — .gitignore
-# =============================================================================
-
-# Dependencies
-node_modules/
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
 
 # Persistent data (each user has their own)
 datos_locales/
@@ -16,8 +15,6 @@ ejemplos/
 .DS_Store
 Thumbs.db
 
-# Bun (lockfile should be committed, nothing to ignore)
-
 # Logs
 *.log
 /tmp/
@@ -29,6 +26,9 @@ Thumbs.db
 *.swo
 *~
 
-# Env files (example file is tracked instead)
+# Env files
 .env
 .env.local
+
+# Old Node/Bun files (moved but keep git history)
+old/

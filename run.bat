@@ -1,67 +1,44 @@
 @echo off
-REM ===========================================================================
-REM Legajo Digital — Inicio rápido (Windows)
-REM ===========================================================================
-REM Uso:  Hace doble click en run.bat
-REM ===========================================================================
+title Legajo Digital
 
-echo +========================================+
-echo ^|       Legajo Digital - Inicio Rápido    ^|
-echo +========================================+
+echo ========================================
+echo    Legajo Digital - Inicio Rapido
+echo ========================================
 echo.
 
-REM ---- Detectar Docker ----
 where docker >nul 2>nul
-if %ERRORLEVEL% EQU 0 (
-    echo 🐳 Docker detectado. Usando Docker...
+if %errorlevel% equ 0 (
+    echo [Docker detectado. Usando Docker...]
     echo.
-    
-    REM Verificar si la imagen existe
-    docker image inspect legajo-digital:latest >nul 2>nul
-    if %ERRORLEVEL% NEQ 0 (
-        echo Construyendo imagen Docker...
-        docker compose build
-    )
-    
-    echo Iniciando contenedor...
-    docker compose up -d
-    
+    docker compose up -d --build
     echo.
-    echo ✅ Legajo Digital corriendo en: http://localhost:3000
-    echo.
-    echo    Para ver logs:  docker compose logs -f
-    echo    Para detener:   docker compose down
-    pause
-    exit /b 0
+    echo [Abri http://localhost:3000]
+    echo [Para detener: docker compose down]
+    timeout /t 5 >nul
+    start http://localhost:3000
+    exit /b
 )
 
-REM ---- Sin Docker, usar Bun ----
-echo 📦 Docker no detectado. Usando Bun directamente...
+echo [Docker no detectado. Usando Python directamente...]
 echo.
 
-REM Verificar Bun
-where bun >nul 2>nul
-if %ERRORLEVEL% NEQ 0 (
-    echo Bun no encontrado. Instalando...
-    powershell -c "iwr bun.sh/install.ps1 -useb | iex"
-    echo.
-    echo Bun instalado. Cerra y reabrí la terminal, o ejecutá:
-    echo   %USERPROFILE%\.bun\bin\bun.exe server.js
+where python3 >nul 2>nul || where python >nul 2>nul
+if %errorlevel% neq 0 (
+    echo [Python no encontrado. Instalalo desde https://python.org]
     pause
     exit /b 1
 )
 
-REM Instalar dependencias
-if not exist "node_modules" (
-    echo Instalando dependencias...
-    bun install
+if not exist "venv" (
+    echo [Creando entorno virtual...]
+    python3 -m venv venv 2>nul || python -m venv venv
 )
 
-echo Iniciando servidor...
-echo.
-echo ✅ Abrí http://localhost:3000 en tu navegador
-echo    Para detener: Ctrl+C
-echo.
+echo [Instalando dependencias...]
+call venv\Scripts\activate.bat
+pip install -q -r requirements.txt
 
-bun server.js
-pause
+echo.
+echo [Abri http://localhost:3000]
+start http://localhost:3000
+python3 server.py
