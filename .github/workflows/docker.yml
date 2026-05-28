@@ -75,29 +75,31 @@ jobs:
 
       - name: Write test scripts
         run: |
-          cat > /tmp/test_agentes.py << 'PYEOF'
-import json, sys
-data = json.load(sys.stdin)
-assert 'agentes' in data, 'Missing agentes key'
-print(f'  Docentes encontrados: {len(data["agentes"])}')
-print("OK /agentes")
-PYEOF
+          # Escribir script de prueba para /agentes
+          printf '%s\n' \
+            'import json, sys' \
+            'data = json.load(sys.stdin)' \
+            "assert 'agentes' in data, 'Missing agentes key'" \
+            'print(f"  Docentes encontrados: {len(data[\"agentes\"])}")' \
+            'print("OK /agentes")' \
+            > /tmp/test_agentes.py
 
-          cat > /tmp/test_excel.py << 'PYEOF'
-import sys
-try:
-    import openpyxl
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.append(['DNI', 'Inicio', 'Fin', 'Cargo'])
-    ws.append(['12345678', '01/02/2020', '31/12/2020', 'MAESTRO'])
-    ws.append(['12345678', '01/03/2021', '30/06/2021', 'MAESTRO'])
-    wb.save('/tmp/test.xlsx')
-    print('Excel generado')
-except ImportError:
-    print('openpyxl no instalado, se salta test')
-    sys.exit(0)
-PYEOF
+          # Escribir script de prueba para Excel
+          printf '%s\n' \
+            'import sys' \
+            'try:' \
+            '    import openpyxl' \
+            '    wb = openpyxl.Workbook()' \
+            '    ws = wb.active' \
+            "    ws.append(['DNI', 'Inicio', 'Fin', 'Cargo'])" \
+            "    ws.append(['12345678', '01/02/2020', '31/12/2020', 'MAESTRO'])" \
+            "    ws.append(['12345678', '01/03/2021', '30/06/2021', 'MAESTRO'])" \
+            '    wb.save("/tmp/test.xlsx")' \
+            '    print("Excel generado")' \
+            'except ImportError:' \
+            '    print("openpyxl no instalado, se salta test")' \
+            '    sys.exit(0)' \
+            > /tmp/test_excel.py
 
       - name: Smoke test — GET /agentes
         run: |
