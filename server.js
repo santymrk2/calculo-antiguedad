@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 const { PDFParse } = require("pdf-parse");
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 
 // Configuración
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

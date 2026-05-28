@@ -9,7 +9,7 @@
  * - ejemplos/certificado_ejemplo.pdf (PDF simulado para testing)
  */
 
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import fs from "fs/promises";
 import path from "path";
 
