@@ -24,7 +24,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY server.js .
 COPY index.html .
-COPY ejemplos ./ejemplos
 
 # Create data directory with proper permissions
 RUN mkdir -p /app/datos_locales && chmod 755 /app/datos_locales
