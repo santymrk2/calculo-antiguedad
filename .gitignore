@@ -1,0 +1,34 @@
+# =============================================================================
+# Legajo Digital — .gitignore
+# =============================================================================
+
+# Dependencies
+node_modules/
+
+# Persistent data (each user has their own)
+datos_locales/
+!datos_locales/.gitkeep
+
+# Generated test files
+ejemplos/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Bun (lockfile should be committed, nothing to ignore)
+
+# Logs
+*.log
+/tmp/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Env files (example file is tracked instead)
+.env
+.env.local

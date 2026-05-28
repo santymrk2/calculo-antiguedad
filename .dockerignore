@@ -1,0 +1,41 @@
+# =============================================================================
+# Legajo Digital — .dockerignore
+# =============================================================================
+
+# Dependencies (installed inside Docker)
+node_modules/
+
+# Local data (mounted as volume at runtime)
+datos_locales/
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentation
+README.md
+ARCHITECTURE.md
+IMPLEMENTATION_CHECKLIST.md
+QUICKSTART.md
+SUMMARY.txt
+SYSTEM_DIAGRAM.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# CI
+.github/
+
+# Scripts (not needed inside container)
+run.sh
+run.bat
+
+# Logs
+*.log

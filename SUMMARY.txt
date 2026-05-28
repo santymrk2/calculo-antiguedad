@@ -1,0 +1,275 @@
+================================================================================
+  MÓDULO DE CÁLCULO DE ANTIGÜEDAD Y LEGAJO DIGITAL - MVP COMPLETO
+================================================================================
+
+✅ PROYECTO LISTO PARA DESCARGAR Y EJECUTAR
+
+================================================================================
+ARCHIVOS INCLUIDOS:
+================================================================================
+
+📋 DOCUMENTACIÓN:
+  ├── README.md                 ← LEER PRIMERO (guía completa)
+  ├── QUICKSTART.md             ← Inicio en 5 minutos
+  ├── ARCHITECTURE.md           ← Detalles técnicos profundos
+  └── SUMMARY.txt               ← Este archivo
+
+💻 CÓDIGO FUENTE (Listo para producción):
+  ├── package.json              ← Dependencias (pdf-parse, xlsx)
+  ├── server.js                 ← Backend Bun (18 KB, ~800 líneas)
+  ├── index.html                ← Frontend HTML + Vanilla JS (18 KB)
+  └── test-examples.js          ← Script para generar datos de prueba
+
+⚙️ CONFIGURACIÓN:
+  └── .gitignore               ← Archivos ignorados en git
+
+================================================================================
+REQUISITOS:
+================================================================================
+
+✓ Bun 1.0+ (o Node.js 18+)
+✓ npm o bun (para instalar dependencias)
+✓ Navegador moderno (Chrome, Firefox, Safari, Edge)
+
+================================================================================
+INSTALACIÓN RÁPIDA (3 comandos):
+================================================================================
+
+1. Instalar dependencias:
+   $ bun install
+
+2. Generar archivos de prueba (opcional):
+   $ bun test-examples.js
+
+3. Iniciar servidor:
+   $ bun server.js
+
+4. Abrir en navegador:
+   http://localhost:3000
+
+================================================================================
+CARACTERÍSTICAS IMPLEMENTADAS:
+================================================================================
+
+✅ Ingesta de archivos PDF (GEDO/DIEGEP PBA) y Excel
+✅ Extracción automática de DNI, períodos y cargos
+✅ Normalización de datos a modelo unificado
+✅ Deduplicación inteligente (evita registros duplicados)
+✅ Fusión de períodos superpuestos (merge intervals)
+✅ Cálculo de antigüedad en año comercial provincial (360 días/año)
+✅ Total Bruto (sin fusión) y Total Neto (con fusión)
+✅ Desglose por cargo/rol
+✅ Persistencia en filesystem local (sin BD externa)
+✅ Interfaz web minimalista y responsiva
+✅ Dropzone para cargar archivos
+✅ Tablas de resultados con cálculos
+✅ Historial consolidado de períodos
+
+================================================================================
+TECNOLOGÍA UTILIZADA:
+================================================================================
+
+Backend:
+  • Bun (servidor nativo, sin Express)
+  • pdf-parse v2.4.5 (extracción PDF)
+  • xlsx v0.18.5 (procesamiento Excel)
+  • Node.js fs & path (persistencia)
+
+Frontend:
+  • HTML5 puro (sin frameworks)
+  • CSS3 incrustado (sin SCSS/Bootstrap)
+  • Vanilla JavaScript (sin jQuery/React)
+
+Almacenamiento:
+  • Sistema de archivos local (portabilidad)
+  • JSON para legajo histórico
+  • Copia de documentos origen para auditoría
+
+================================================================================
+ARQUITECTURA DE DATOS:
+================================================================================
+
+Carpeta generada dinámicamente:
+datos_locales/
+└── {DNI_DEL_AGENTE}/
+    ├── legajo_historico.json        ← Consolidado del agente
+    └── documentos_origen/
+        ├── {timestamp}_archivo1.pdf
+        └── {timestamp}_archivo2.xlsx
+
+Modelo de datos unificado (JSON):
+{
+  "dni": "23456789",
+  "inicio": "2015-03-01",
+  "fin": "2020-12-31",
+  "cargo": "MAESTRO DE GRADO",
+  "origen": "1715123456_documento.pdf (PDF)"
+}
+
+================================================================================
+REGLAS DE NEGOCIO (CORE):
+================================================================================
+
+1. DEDUPLICACIÓN:
+   Si un registro tiene exactamente el mismo (DNI, Inicio, Fin, Cargo) que
+   uno existente, se descarta automáticamente.
+
+2. FUSIÓN (MERGE INTERVALS):
+   Períodos superpuestos se fusionan en bloques continuos para evitar
+   duplicar días netos en el cálculo de antigüedad.
+
+3. CONTEO COMERCIAL (AÑO PROVINCIAL):
+   • 1 Año = 360 días (no 365)
+   • 1 Mes = 30 días (fijo, no variable)
+   • Conteo inclusivo (+1 día para criterio de alta)
+
+4. CÁLCULO DE ANTIGÜEDAD:
+   • Total Bruto: Suma de TODOS los períodos sin fusionar
+   • Total Neto: Suma de períodos DESPUÉS de fusionar solapamientos
+
+================================================================================
+ENDPOINTS API:
+================================================================================
+
+POST /procesar
+  Recibe: FormData con archivo (PDF o Excel)
+  Retorna: JSON con resultados (bruto, neto, desglose, legajo)
+
+GET /agente/{dni}
+  Retorna: Legajo histórico de un agente específico
+
+GET /
+  Retorna: Interfaz HTML
+
+================================================================================
+EJEMPLOS DE USO:
+================================================================================
+
+Archivo PDF (GEDO/DIEGEP):
+---
+DNI: 35.654.321
+DEL 01/02/2018 AL 30/06/2020 COMO DOCENTE PRIMARIA
+DEL 01/07/2020 AL 31/12/2023 COMO VICE DIRECTOR
+---
+
+Archivo Excel:
+---
+| DNI      | Inicio      | Fin         | Cargo              |
+|----------|-------------|-------------|-------------------|
+| 35654321 | 01/02/2018  | 30/06/2020  | DOCENTE PRIMARIA  |
+| 35654321 | 01/07/2020  | 31/12/2023  | VICE DIRECTOR     |
+---
+
+Resultado esperado:
+- Total Bruto: 5.9 años
+- Total Neto: 5.9 años (sin solapamientos)
+- DOCENTE PRIMARIA: 2.4 años
+- VICE DIRECTOR: 3.5 años
+
+================================================================================
+VALIDACIONES IMPLEMENTADAS:
+================================================================================
+
+✓ DNI extraído correctamente
+✓ Fechas en formato válido (no 31/02/2020)
+✓ Períodos con fecha_inicio <= fecha_fin
+✓ Extensión de archivo soportada (.pdf, .xlsx, .xls)
+✓ Deduplicación exacta antes de guardar
+✓ Persistencia sin errores de permisos
+
+================================================================================
+PRÓXIMAS VERSIONES (FUERA DE SCOPE MVP):
+================================================================================
+
+• Generación de PDFs con reportes y constancias
+• Sincronización con Sistema de Gestión Académica central
+• Alertas previsionales (jubilación, cambios de categoría)
+• Soporte para multi-usuario / autenticación
+• Migracion a base de datos SQL/NoSQL
+• API REST completa para integración
+• Validaciones complejas (compatibilidad de cargos)
+
+================================================================================
+ARCHIVOS GENERADOS EN RUNTIME:
+================================================================================
+
+Al procesar documentos, se crean automáticamente:
+
+datos_locales/
+├── 23456789/                          (DNI del agente)
+│   ├── legajo_historico.json         (JSON con todos los períodos)
+│   └── documentos_origen/
+│       ├── 1715123456_archivo1.pdf   (Copia del PDF subido)
+│       └── 1715123457_archivo2.xlsx  (Copia del Excel subido)
+│
+├── 35654321/
+│   ├── legajo_historico.json
+│   └── documentos_origen/
+│       └── 1715123458_datos.pdf
+│
+└── ... (un directorio por DNI procesado)
+
+================================================================================
+TROUBLESHOOTING:
+================================================================================
+
+❌ "Puerto 3000 ocupado"
+   → Cambiar PORT en server.js o usar: PORT=3001 bun server.js
+
+❌ "No se instalan dependencias"
+   → Ejecutar: rm -rf node_modules bun.lockb && bun install
+
+❌ "PDF no se procesa"
+   → PDF debe ser editable (no escaneado)
+   → Debe contener: "DNI: XX.XXX.XXX"
+   → Debe tener: "DEL dd/mm/yyyy AL dd/mm/yyyy"
+
+❌ "Excel no detecta columnas"
+   → Columnas deben ser: DNI, Inicio, Fin, Cargo (case-insensitive)
+   → Fechas en formato: DD/MM/YYYY o YYYY-MM-DD
+
+❌ "Error HTTP 500"
+   → Revisar logs del servidor (stderr)
+   → Verificar permisos en carpeta proyecto
+   → Reintentar con otro archivo
+
+================================================================================
+SOPORTE Y DOCUMENTACIÓN:
+================================================================================
+
+1. Lee QUICKSTART.md para empezar en 5 minutos
+2. Lee README.md para documentación completa
+3. Lee ARCHITECTURE.md para entender los algoritmos
+4. Revisa los comentarios en server.js (funciones bien documentadas)
+5. Inspecciona datos_locales/{DNI}/legajo_historico.json para ver estructura
+
+================================================================================
+LICENCIA Y ATRIBUCIONES:
+================================================================================
+
+MVP desarrollado conforme a especificaciones arquitectónicas.
+Stack: Bun + Vanilla JS + Filesystem
+Dependencias: pdf-parse (v2.4.5), xlsx (v0.18.5)
+
+Diseñado para: Sistema GEDO/DIEGEP - Provincia de Buenos Aires
+Contexto: Gestión de antigüedad del personal docente y administrativo
+
+================================================================================
+¡LISTO PARA USAR!
+================================================================================
+
+Próximos pasos:
+1. Descargar esta carpeta
+2. Seguir QUICKSTART.md
+3. Ejecutar: bun server.js
+4. Abrir: http://localhost:3000
+5. Cargar archivos PDF o Excel
+6. Ver resultados en tiempo real
+
+¡Buen provecho! 🚀
+
+================================================================================
+Última actualización: 27/05/2024
+Versión: MVP 1.0
+Estado: ✅ Producción lista (offline, local)
+================================================================================

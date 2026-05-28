@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Legajo Digital — Antigüedad Docente</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <style>
+    /* ====================================================================
+       DESIGN SYSTEM — Swiss Minimal
+       ==================================================================== */
+    :root {
+      --color-bg: #f5f5f5;
+      --color-surface: #ffffff;
+      --color-primary: #111111;
+      --color-secondary: #6b7280;
+      --color-tertiary: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-border-light: #f0f0f0;
+      --color-accent: #2563eb;
+      --color-accent-hover: #1d4ed8;
+      --color-accent-light: #eff6ff;
+      --color-success: #059669;
+      --color-success-light: #ecfdf5;
+      --color-error: #dc2626;
+      --color-error-light: #fef2f2;
+      --color-bruto: #111111;
+      --color-neto: #2563eb;
+
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+      --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --max-width: 1040px;
+    }
+
+    /* ====================================================================
+       RESET
+       ==================================================================== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ====================================================================
+       BASE
+       ==================================================================== */
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-primary);
+      background: var(--color-bg);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ====================================================================
+       LAYOUT
+       ==================================================================== */
+    .app {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: var(--space-2xl) var(--space-lg);
+    }
+
+    /* ====================================================================
+       HEADER
+       ==================================================================== */
+    .header {
+      margin-bottom: var(--space-2xl);
+      padding-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: var(--color-primary);
+      line-height: 1.2;
+    }
+
+    .header p {
+      font-size: 0.875rem;
+      color: var(--color-secondary);
+      margin-top: var(--space-xs);
+      font-weight: 400;
+    }
+
+    /* ====================================================================
+       SETTINGS BAR — Calculation mode toggle
+       ==================================================================== */
+    .settings-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-sm) 0 var(--space-md);
+      margin-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .settings-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .settings-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-secondary);
+    }
+
+    .toggle-group {
+      display: flex;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .toggle-btn {
+      padding: 0.375rem 0.875rem;
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      border: none;
+      background: var(--color-surface);
+      color: var(--color-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .toggle-btn:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 20%;
+      height: 60%;
+      width: 1px;
+      background: var(--color-border);
+    }
+
+    .toggle-btn:hover {
+      color: var(--color-primary);
+      background: var(--color-bg);
+    }
+
+    .toggle-btn.active {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .toggle-btn.active:hover {
+      background: var(--color-primary);
+      opacity: 0.9;
+    }
+
+    .settings-indicator {
+      font-size: 0.75rem;
+      color: var(--color-tertiary);
+    }
+
+    /* ====================================================================
+       ALERTS
+       ==================================================================== */
+    .alert {
+      padding: var(--space-md);
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-lg);
+      display: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .alert-success {
+      background: var(--color-success-light);
+      color: var(--color-success);
+      border-left: 3px solid var(--color-success);
+      display: block;
+    }
+
+    .alert-error {
+      background: var(--color-error-light);
+      color: var(--color-error);
+      border-left: 3px solid var(--color-error);
+      display: block;
+    }
+
+    .alert.hidden { display: none; }
+
+    /* ====================================================================
+       PANEL GRID — Search + Teachers
+       ==================================================================== */
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+
+    @media (max-width: 768px) {
+      .panel-grid { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+    }
+
+    .panel h2 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-secondary);
+      margin-bottom: var(--space-md);
+    }
+
+    /* --- Search --- */
+    .search-row {
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    .search-row input {
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.15s;
+      color: var(--color-primary);
+      background: var(--color-surface);
+    }
+
+    .search-row input::placeholder { color: var(--color-tertiary); }
+    .search-row input:focus { border-color: var(--color-accent); }
+
+    .search-row button {
+      padding: 0.5rem 1rem;
+      background: var(--color-accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .search-row button:hover { background: var(--color-accent-hover); }
+    .search-row button:active { transform: translateY(1px); }
+
+    /* --- Teachers header --- */
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-md);
+    }
+
+    .panel-header h2 { margin-bottom: 0; }
+
+    .panel-badge {
+      font-size: 0.75rem;
+      color: var(--color-secondary);
+      background: var(--color-bg);
+      padding: 0.125rem 0.625rem;
+      border-radius: 99px;
+      font-weight: 500;
+    }
+
+    /* --- Teachers grid --- */
+    .agentes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--space-sm);
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .agentes-grid:empty,
+    .agentes-grid .agentes-empty { max-height: none; overflow: visible; }
+
+    .agente-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--radius-sm);
+      padding: var(--space-md);
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .agente-card:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    .agente-card.active {
+      border-color: var(--color-accent);
+      background: var(--color-accent-light);
+    }
+
+    .agente-card-dni {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      margin-bottom: var(--space-xs);
+      letter-spacing: -0.02em;
+    }
+
+    .agente-card-meta {
+      font-size: 0.75rem;
+      color: var(--color-secondary);
+      line-height: 1.5;
+    }
+
+    .agente-card-stat {
+      display: inline-block;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--color-accent);
+      background: var(--color-accent-light);
+      padding: 0.125rem 0.5rem;
+      border-radius: 99px;
+      margin-top: var(--space-xs);
+    }
+
+    .agentes-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: var(--space-xl) var(--space-md);
+      color: var(--color-tertiary);
+      font-size: 0.8125rem;
+      line-height: 1.6;
+    }
+
+    .agentes-empty svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--color-tertiary);
+      margin-bottom: var(--space-sm);
+    }
+
+    /* ====================================================================
+       DROPZONE
+       ==================================================================== */
+    .dropzone {
+      border: 1px dashed var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-2xl) var(--space-lg);
+      text-align: center;
+      background: var(--color-surface);
+      transition: all 0.15s;
+      cursor: pointer;
+      margin-bottom: var(--space-xl);
+    }
+
+    .dropzone:hover,
+    .dropzone.dragover {
+      border-color: var(--color-accent);
+      background: var(--color-accent-light);
+    }
+
+    .dropzone svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--color-tertiary);
+      margin-bottom: var(--space-md);
+    }
+
+    .dropzone.dragover svg { stroke: var(--color-accent); }
+
+    .dropzone p {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--color-primary);
+      margin-bottom: var(--space-xs);
+    }
+
+    .dropzone span {
+      font-size: 0.8125rem;
+      color: var(--color-secondary);
+      display: block;
+      margin-bottom: var(--space-md);
+    }
+
+    .dropzone input[type="file"] { display: none; }
+
+    .dropzone-btn {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .dropzone-btn:hover { opacity: 0.8; }
+    .dropzone-btn:active { transform: translateY(1px); }
+
+    /* ====================================================================
+       LOADING
+       ==================================================================== */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: var(--space-2xl) 0;
+      color: var(--color-secondary);
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--color-border);
+      border-top-color: var(--color-accent);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin: 0 auto var(--space-md);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading p { font-size: 0.875rem; }
+
+    /* ====================================================================
+       RESULTS
+       ==================================================================== */
+    .results-section { display: none; }
+    .results-section.visible { display: block; animation: fadeIn 0.25s ease; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .process-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-md) var(--space-lg);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-lg);
+      font-size: 0.8125rem;
+      color: var(--color-secondary);
+    }
+
+    .process-info strong { color: var(--color-primary); font-weight: 600; }
+
+    .process-info .tag {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.625rem;
+      border-radius: 99px;
+      background: var(--color-accent-light);
+      color: var(--color-accent);
+    }
+
+    /* --- Totals --- */
+    .totals-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+
+    @media (max-width: 600px) { .totals-grid { grid-template-columns: 1fr; } }
+
+    .total-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+    }
+
+    .total-card h3 {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-secondary);
+      margin-bottom: var(--space-md);
+    }
+
+    .total-subtitle {
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--color-tertiary);
+      margin-left: var(--space-xs);
+    }
+
+    .total-card.bruto h3 { color: var(--color-bruto); }
+    .total-card.neto h3 { color: var(--color-neto); }
+
+    /* --- 3-column value grid --- */
+    .value-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .value-col {
+      text-align: center;
+      padding: var(--space-sm) 0;
+    }
+
+    .value-big {
+      display: block;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: var(--space-xs);
+    }
+
+    .total-card.bruto .value-big { color: var(--color-bruto); }
+    .total-card.neto .value-big { color: var(--color-neto); }
+
+    .value-label {
+      display: block;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-tertiary);
+    }
+
+    .total-footnote {
+      font-size: 0.75rem;
+      color: var(--color-tertiary);
+      text-align: center;
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--color-border-light);
+    }
+
+    .total-footnote span {
+      font-weight: 600;
+      color: var(--color-secondary);
+    }
+
+    /* --- Tables --- */
+    .table-section {
+      margin-bottom: var(--space-xl);
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-md);
+    }
+
+    .table-header h3 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-secondary);
+      margin: 0;
+    }
+
+    .table-header .count {
+      font-size: 0.75rem;
+      color: var(--color-tertiary);
+      font-weight: 400;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+
+    thead {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    th {
+      padding: 0.625rem 0.875rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-secondary);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.625rem 0.875rem;
+      border-bottom: 1px solid var(--color-border-light);
+      color: var(--color-primary);
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--color-bg); }
+
+    .cell-mono {
+      font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+      font-size: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .cell-accent { color: var(--color-accent); font-weight: 500; }
+    .cell-cargo { font-weight: 500; }
+    .cell-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+    /* ====================================================================
+       SCROLLBAR (teachers grid)
+       ==================================================================== */
+    .agentes-grid::-webkit-scrollbar { width: 4px; }
+    .agentes-grid::-webkit-scrollbar-track { background: transparent; }
+    .agentes-grid::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 99px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- HEADER -->
+    <header class="header">
+      <h1>Legajo Digital</h1>
+      <p>Cálculo de Antigüedad Docente &mdash; Provincia de Buenos Aires</p>
+    </header>
+
+    <!-- SETTINGS — Calculation mode -->
+    <div class="settings-bar">
+      <div class="settings-group">
+        <span class="settings-label">Modo de c&aacute;lculo</span>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-mode="comercial" onclick="setCalcMode('comercial')">Comercial (360d)</button>
+          <button class="toggle-btn" data-mode="natural" onclick="setCalcMode('natural')">Natural (365d)</button>
+        </div>
+      </div>
+      <span id="modeIndicator" class="settings-indicator">A&ntilde;o comercial &middot; 360 d&iacute;as</span>
+    </div>
+
+    <!-- ALERTS -->
+    <div id="alertSuccess" class="alert alert-success hidden"></div>
+    <div id="alertError" class="alert alert-error hidden"></div>
+
+    <!-- PANEL GRID: SEARCH + TEACHERS -->
+    <div class="panel-grid">
+      <!-- Search -->
+      <div class="panel">
+        <h2>Consultar docente</h2>
+        <div class="search-row">
+          <input
+            id="dniSearch"
+            type="text"
+            inputmode="numeric"
+            placeholder="DNI sin puntos"
+            maxlength="8"
+          />
+          <button id="btnSearch" onclick="searchAgente()">Buscar</button>
+        </div>
+      </div>
+
+      <!-- Teachers list -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Docentes registrados</h2>
+          <span id="agentesCount" class="panel-badge">Cargando</span>
+        </div>
+        <div id="agentesGrid" class="agentes-grid">
+          <div class="agentes-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <div>Cargando docentes...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DROPZONE -->
+    <div id="dropzone" class="dropzone">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <p>Arrastrá o seleccion&aacute; un archivo</p>
+      <span>PDF (GEDO/DIEGEP) o Excel (.xlsx / .xls)</span>
+      <input id="fileInput" type="file" accept=".pdf,.xlsx,.xls" />
+      <button class="dropzone-btn" onclick="document.getElementById('fileInput').click()">
+        Seleccionar archivo
+      </button>
+    </div>
+
+    <!-- LOADING -->
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Procesando documento&hellip;</p>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="resultsSection" class="results-section">
+
+      <!-- Process info -->
+      <div id="processInfo" class="process-info">
+        <span></span>
+      </div>
+
+      <!-- Totals -->
+      <div class="totals-grid">
+        <div class="total-card bruto">
+          <h3>Bruto <span class="total-subtitle">sin fusionar</span></h3>
+          <div class="value-grid">
+            <div class="value-col">
+              <span class="value-big" id="brutoYears">&mdash;</span>
+              <span class="value-label">a&ntilde;os</span>
+            </div>
+            <div class="value-col">
+              <span class="value-big" id="brutoMonths">&mdash;</span>
+              <span class="value-label">meses</span>
+            </div>
+            <div class="value-col">
+              <span class="value-big" id="brutoDaysDetail">&mdash;</span>
+              <span class="value-label">d&iacute;as</span>
+            </div>
+          </div>
+          <div class="total-footnote"><span id="brutoTotalDias">&mdash;</span> d&iacute;as naturales totales</div>
+        </div>
+        <div class="total-card neto">
+          <h3>Neto <span class="total-subtitle">per&iacute;odos fusionados</span></h3>
+          <div class="value-grid">
+            <div class="value-col">
+              <span class="value-big" id="netoYears">&mdash;</span>
+              <span class="value-label">a&ntilde;os</span>
+            </div>
+            <div class="value-col">
+              <span class="value-big" id="netoMonths">&mdash;</span>
+              <span class="value-label">meses</span>
+            </div>
+            <div class="value-col">
+              <span class="value-big" id="netoDaysDetail">&mdash;</span>
+              <span class="value-label">d&iacute;as</span>
+            </div>
+          </div>
+          <div class="total-footnote"><span id="netoTotalDias">&mdash;</span> d&iacute;as naturales totales</div>
+        </div>
+      </div>
+
+      <!-- Breakdown by role -->
+      <div class="table-section">
+        <div class="table-header">
+          <h3>Desglose por cargo</h3>
+          <span class="count" id="breakdownCount"></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cargo</th>
+                <th>Antig&uuml;edad</th>
+                <th>A&ntilde;os</th>
+                <th>Meses</th>
+                <th>D&iacute;as</th>
+              </tr>
+            </thead>
+            <tbody id="breakdownBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Legajo -->
+      <div class="table-section">
+        <div class="table-header">
+          <h3>Historial de per&iacute;odos</h3>
+          <span class="count" id="legajoCount"></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Cargo</th>
+                <th>Origen</th>
+                <th class="cell-num">D&iacute;as</th>
+              </tr>
+            </thead>
+            <tbody id="legajoBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ========================================================================
+    // STATE
+    // ========================================================================
+
+    let currentDni = null;
+    let lastData = null;
+    let calcMode = localStorage.getItem("calcMode") || "comercial";
+
+    // ========================================================================
+    // UTILITIES
+    // ========================================================================
+
+    function formatAntiguedad(obj) {
+      if (!obj) return "0";
+      return ((obj.years + obj.months / 12 + obj.days / 360) * 100) / 100;
+    }
+
+    function daysBetween(inicio, fin) {
+      const start = new Date(inicio);
+      const end = new Date(fin);
+      const diffTime = Math.abs(end - start);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays + 1;
+    }
+
+    function formatYearsMonthsDays(obj) {
+      if (!obj) return "\u2014";
+      return `${obj.years || 0}a ${obj.months || 0}m ${obj.days || 0}d`;
+    }
+
+    function showAlert(message, type) {
+      const id = type === "success" ? "alertSuccess" : "alertError";
+      const el = document.getElementById(id);
+      el.textContent = message;
+      el.classList.remove("hidden");
+      setTimeout(() => { el.classList.add("hidden"); }, 5000);
+    }
+
+    // Hide alerts initially
+    document.getElementById("alertSuccess").classList.add("hidden");
+    document.getElementById("alertError").classList.add("hidden");
+
+    // ========================================================================
+    // RENDER RESULTS
+    // ========================================================================
+
+    function renderResults(data, mode) {
+      lastData = data;
+      const isView = mode === "view";
+      const calc = data[calcMode]; // 'comercial' or 'natural'
+
+      // Process info
+      const infoEl = document.getElementById("processInfo");
+      if (isView) {
+        infoEl.innerHTML = `
+          <span><strong>DNI ${data.dni}</strong> &middot; ${data.totalRecords} per&iacute;odo${data.totalRecords !== 1 ? "s" : ""} en legajo</span>
+          <span class="tag">consulta</span>
+        `;
+      } else {
+        infoEl.innerHTML = `
+          <span><strong>DNI ${data.dni}</strong> &middot; ${data.recordsProcessed} procesado${data.recordsProcessed !== 1 ? "s" : ""} &middot; ${data.recordsAdded} añadido${data.recordsAdded !== 1 ? "s" : ""} &middot; ${data.totalRecords} total</span>
+          <span class="tag">carga</span>
+        `;
+      }
+
+      // Totals — 3-column grid: years / months / days
+      document.getElementById("brutoYears").textContent = calc.bruto.years;
+      document.getElementById("brutoMonths").textContent = calc.bruto.months;
+      document.getElementById("brutoDaysDetail").textContent = calc.bruto.days;
+      document.getElementById("brutoTotalDias").textContent = calc.bruto.total;
+
+      document.getElementById("netoYears").textContent = calc.neto.years;
+      document.getElementById("netoMonths").textContent = calc.neto.months;
+      document.getElementById("netoDaysDetail").textContent = calc.neto.days;
+      document.getElementById("netoTotalDias").textContent = calc.neto.total;
+
+      // Breakdown by role
+      const breakdownBody = document.getElementById("breakdownBody");
+      breakdownBody.innerHTML = "";
+      const roles = Object.entries(calc.byRole);
+      document.getElementById("breakdownCount").textContent = roles.length + " cargo" + (roles.length !== 1 ? "s" : "");
+
+      for (const [cargo, ant] of roles) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="cell-cargo">${cargo}</td>
+          <td class="cell-accent">${formatAntiguedad(ant).toFixed(2)}</td>
+          <td>${ant.years}</td>
+          <td>${ant.months}</td>
+          <td class="cell-num">${ant.days}</td>
+        `;
+        breakdownBody.appendChild(row);
+      }
+
+      if (roles.length === 0) {
+        breakdownBody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--color-tertiary);padding:2rem 0;">Sin datos</td></tr>`;
+      }
+
+      // Legajo (same regardless of mode)
+      const legajoBody = document.getElementById("legajoBody");
+      legajoBody.innerHTML = "";
+      document.getElementById("legajoCount").textContent = data.legajo.length + " registro" + (data.legajo.length !== 1 ? "s" : "");
+
+      for (const period of data.legajo) {
+        const dias = daysBetween(period.inicio, period.fin);
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="cell-mono cell-accent">${period.inicio}</td>
+          <td class="cell-mono cell-accent">${period.fin}</td>
+          <td class="cell-cargo">${period.cargo}</td>
+          <td style="color:var(--color-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;" title="${period.origen}">${period.origen}</td>
+          <td class="cell-mono cell-num">${dias}</td>
+        `;
+        legajoBody.appendChild(row);
+      }
+
+      document.getElementById("resultsSection").classList.add("visible");
+    }
+
+    // ========================================================================
+    // UPLOAD
+    // ========================================================================
+
+    async function uploadFile(file) {
+      document.getElementById("loading").style.display = "block";
+      document.getElementById("resultsSection").classList.remove("visible");
+
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const response = await fetch("/procesar", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Error al procesar el archivo");
+        }
+
+        currentDni = data.dni;
+        renderResults(data, "upload");
+        highlightCard(data.dni);
+        document.getElementById("dniSearch").value = data.dni;
+        showAlert(
+          `Documento procesado: ${data.recordsAdded} per\u00edodo(s) añadido(s)`,
+          "success"
+        );
+        loadAgentesList();
+      } catch (error) {
+        showAlert(`Error: ${error.message}`, "error");
+      } finally {
+        document.getElementById("loading").style.display = "none";
+      }
+    }
+
+    // ========================================================================
+    // SEARCH & TEACHERS
+    // ========================================================================
+
+    async function searchAgente() {
+      const input = document.getElementById("dniSearch");
+      const dni = input.value.trim().replace(/\./g, "");
+
+      if (!dni || dni.length < 6) {
+        showAlert("Ingresá un DNI v\u00e1lido (m\u00ednimo 6 d\u00edgitos)", "error");
+        return;
+      }
+
+      await loadAgente(dni);
+    }
+
+    async function loadAgente(dni) {
+      document.getElementById("loading").style.display = "block";
+      document.getElementById("resultsSection").classList.remove("visible");
+
+      try {
+        const response = await fetch(`/agente/${dni}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Docente no encontrado");
+        }
+
+        currentDni = dni;
+        renderResults(data, "view");
+        highlightCard(dni);
+        document.getElementById("resultsSection").classList.add("visible");
+      } catch (error) {
+        showAlert(`Error: ${error.message}`, "error");
+      } finally {
+        document.getElementById("loading").style.display = "none";
+      }
+    }
+
+    function highlightCard(dni) {
+      document.querySelectorAll(".agente-card").forEach((card) => {
+        card.classList.toggle("active", card.dataset.dni === dni);
+      });
+    }
+
+    async function loadAgentesList() {
+      try {
+        const response = await fetch("/agentes");
+        const data = await response.json();
+
+        const grid = document.getElementById("agentesGrid");
+        const countEl = document.getElementById("agentesCount");
+
+        if (!data.agentes || data.agentes.length === 0) {
+          grid.innerHTML = `
+            <div class="agentes-empty">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              <div>Todav\u00eda no hay docentes registrados.<br>Sub\u00ed un PDF o Excel para empezar.</div>
+            </div>
+          `;
+          countEl.textContent = "Sin registros";
+          return;
+        }
+
+        countEl.textContent = `${data.agentes.length} docente${data.agentes.length !== 1 ? "s" : ""}`;
+
+        grid.innerHTML = "";
+        for (const agente of data.agentes) {
+          const card = document.createElement("div");
+          card.className = "agente-card";
+          card.dataset.dni = agente.dni;
+
+          const calc = agente[calcMode];
+          const diasEnAnio = calcMode === "natural" ? 365 : 360;
+          const anios = ((calc?.neto?.total || 0) / diasEnAnio).toFixed(1);
+          card.innerHTML = `
+            <div class="agente-card-dni">${agente.dni}</div>
+            <div class="agente-card-meta">
+              ${agente.totalRecords} per\u00edodo${agente.totalRecords !== 1 ? "s" : ""} &middot; ${anios} a&ntilde;os netos<br>
+              ${agente.primerPeriodo} &rarr; ${agente.ultimoPeriodo}
+            </div>
+            <span class="agente-card-stat">${agente.documentos} documento${agente.documentos !== 1 ? "s" : ""}</span>
+          `;
+
+          card.addEventListener("click", () => {
+            loadAgente(agente.dni);
+            document.getElementById("dniSearch").value = agente.dni;
+          });
+
+          if (agente.dni === currentDni) {
+            card.classList.add("active");
+          }
+
+          grid.appendChild(card);
+        }
+      } catch (error) {
+        console.error("Error al cargar docentes:", error);
+        document.getElementById("agentesGrid").innerHTML = `
+          <div class="agentes-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <div>Error al cargar la lista de docentes</div>
+          </div>
+        `;
+      }
+    }
+
+    // ========================================================================
+    // CALCULATION MODE
+    // ========================================================================
+
+    function setCalcMode(mode) {
+      calcMode = mode;
+      localStorage.setItem("calcMode", mode);
+
+      // Update toggle buttons
+      document.querySelectorAll(".toggle-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.mode === mode);
+      });
+
+      // Update indicator text
+      const indicator = document.getElementById("modeIndicator");
+      indicator.textContent =
+        mode === "comercial"
+          ? "A\u00f1o comercial \u00b7 360 d\u00edas"
+          : "A\u00f1o natural \u00b7 365 d\u00edas";
+
+      // Re-render if data is loaded
+      if (lastData) {
+        renderResults(lastData, lastData.recordsProcessed !== undefined ? "upload" : "view");
+      }
+
+      // Refresh teacher cards
+      loadAgentesList();
+    }
+
+    // ========================================================================
+    // EVENT LISTENERS
+    // ========================================================================
+
+    // Dropzone
+    const dropzone = document.getElementById("dropzone");
+    const fileInput = document.getElementById("fileInput");
+
+    dropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropzone.classList.add("dragover");
+    });
+
+    dropzone.addEventListener("dragleave", () => {
+      dropzone.classList.remove("dragover");
+    });
+
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("dragover");
+      if (e.dataTransfer.files.length > 0) {
+        uploadFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener("change", (e) => {
+      if (e.target.files.length > 0) {
+        uploadFile(e.target.files[0]);
+      }
+    });
+
+    // Search Enter key
+    document.getElementById("dniSearch").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") { searchAgente(); }
+    });
+
+    // Initialize: sync toggle with saved mode + load teachers
+    document.querySelectorAll(".toggle-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.mode === calcMode);
+    });
+    const indicator = document.getElementById("modeIndicator");
+    indicator.textContent =
+      calcMode === "comercial"
+        ? "A\u00f1o comercial \u00b7 360 d\u00edas"
+        : "A\u00f1o natural \u00b7 365 d\u00edas";
+
+    loadAgentesList();
+  </script>
+</body>
+</html>
