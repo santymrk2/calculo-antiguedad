@@ -73,24 +73,18 @@ jobs:
           grep -q "Legajo Digital" /tmp/index.html || exit 1
           echo "✅ HTML OK"
 
-      - name: Smoke test — GET /agentes
+      - name: Write test scripts
         run: |
-          echo "=== GET /agentes ==="
-          RESPONSE=$(curl -s http://localhost:3000/agentes)
-          echo "$RESPONSE" | python3 -c "
+          cat > /tmp/test_agentes.py << 'PYEOF'
 import json, sys
 data = json.load(sys.stdin)
 assert 'agentes' in data, 'Missing agentes key'
-print(f'  Docentes encontrados: {len(data[\"agentes\"])}')
-print('✅ /agentes OK')
-"
+print(f'  Docentes encontrados: {len(data["agentes"])}')
+print("OK /agentes")
+PYEOF
 
-      - name: Smoke test — Upload Excel
-        run: |
-          echo "=== POST /procesar (Excel) ==="
-          # Create a minimal test Excel
-          python3 -c "
-import json
+          cat > /tmp/test_excel.py << 'PYEOF'
+import sys
 try:
     import openpyxl
     wb = openpyxl.Workbook()
@@ -101,15 +95,28 @@ try:
     wb.save('/tmp/test.xlsx')
     print('Excel generado')
 except ImportError:
-    print('openpyxl no disponible, creando CSV')
-    with open('/tmp/test.xlsx', 'wb') as f:
-        # Minimal valid xlsx is complex, use csv instead
-        pass
-"
-          # Try with a simple approach — just test the endpoint exists
-          RESPONSE=$(curl -s -X POST http://localhost:3000/procesar \
-            -F "file=@/dev/null" 2>/dev/null || echo '{"error":"test"}')
-          echo "✅ POST /procesar responde (esperado 400 por archivo inválido)"
+    print('openpyxl no instalado, se salta test')
+    sys.exit(0)
+PYEOF
+
+      - name: Smoke test — GET /agentes
+        run: |
+          echo "=== GET /agentes ==="
+          curl -s http://localhost:3000/agentes | python3 /tmp/test_agentes.py
+
+      - name: Smoke test — Upload Excel
+        run: |
+          echo "=== POST /procesar (Excel) ==="
+          python3 /tmp/test_excel.py
+          if [ -f /tmp/test.xlsx ]; then
+            RESPONSE=$(curl -s -X POST http://localhost:3000/procesar \
+              -F "file=@/tmp/test.xlsx")
+            echo "$RESPONSE" | python3 -c "import json,sys; d=json.load(sys.stdin); assert 'resultados' in d, 'Missing resultados'; print('OK /procesar')"
+          else
+            RESPONSE=$(curl -s -X POST http://localhost:3000/procesar \
+              -F "file=@/dev/null")
+            echo "✅ POST /procesar responde (sin Excel)"
+          fi
 
       - name: Stop container
         run: docker stop legajo-digital
