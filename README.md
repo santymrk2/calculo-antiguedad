@@ -156,7 +156,6 @@ En cada release de GitHub se generan automáticamente ejecutables para:
 
 - `legajo-digital-linux-x64` (Linux)
 - `legajo-digital-macos-arm64` (macOS Apple Silicon)
-- `legajo-digital-macos-x64` (macOS Intel)
 - `legajo-digital-windows-x64.exe`
 
 El EXE funciona **completo** para: servir la interfaz HTML, procesar archivos

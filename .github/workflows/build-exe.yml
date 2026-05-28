@@ -1,7 +1,7 @@
 # =============================================================================
 # Build EXE — Cross-platform executables (on release)
 # =============================================================================
-# Builds standalone executables for Mac (ARM + Intel), Windows, and Linux
+# Builds standalone executables for Mac (ARM), Windows, and Linux
 # using `bun build --compile`.
 #
 # ⚠️  LIMITACIÓN: El EXE no puede procesar PDFs (usa @napi-rs/canvas, módulo
@@ -35,10 +35,6 @@ jobs:
           - os: macos-latest
             target: bun-darwin-arm64
             artifact: legajo-digital-macos-arm64
-            ext: ""
-          - os: macos-13
-            target: bun-darwin-x64
-            artifact: legajo-digital-macos-x64
             ext: ""
           - os: windows-latest
             target: bun-windows-x64
