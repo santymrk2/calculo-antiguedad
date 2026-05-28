@@ -46,6 +46,8 @@ jobs:
             ext: ".exe"
 
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
