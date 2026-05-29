@@ -7,271 +7,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
-  <style>
-
-    /* ====================================================================
-       DESIGN SYSTEM — Swiss Minimal
-       ==================================================================== */
-    :root {
-      --color-primary: #1a1a1a;
-      --color-secondary: #999999;
-      --color-accent: #0040FF;
-      --color-bg: #ffffff;
-      --color-border: #e5e5e5;
-      --color-border-light: #f0f0f0;
-
-      --font-sans: 'Inter', 'IBM Plex Sans', sans-serif;
-      
-      --space-4: 4px;
-      --space-8: 8px;
-      --space-12: 12px;
-      --space-16: 16px;
-      --space-24: 24px;
-      --space-32: 32px;
-      --space-48: 48px;
-      --space-64: 64px;
-      --space-96: 96px;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: var(--font-sans);
-      color: var(--color-primary);
-      background: var(--color-bg);
-      min-height: 100vh;
-      line-height: 1.5;
-      font-size: 13px;
-    }
-
-    .app {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: var(--space-48);
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: var(--space-24);
-    }
-    
-    @media (max-width: 768px) {
-      .app { padding: var(--space-24); display: block; }
-    }
-
-    .col-12 { grid-column: span 12; }
-    .col-8 { grid-column: span 8; }
-    .col-4 { grid-column: span 4; }
-
-    /* PAGE SYSTEM */
-    .page { display: none; }
-    .page.active { display: block; grid-column: span 12; }
-    .page .section-spacing { margin-bottom: var(--space-48); }
-
-    /* DETALLE HEADER */
-    .detalle-header {
-      margin-bottom: var(--space-32);
-      padding-bottom: var(--space-24);
-      border-bottom: 1px solid var(--color-border);
-    }
-    .detalle-header-dni { font-size: 20px; font-weight: 500; }
-    .detalle-header-meta { font-size: 12px; color: var(--color-secondary); margin-top: var(--space-4); }
-
-    /* HEADER & TABS */
-    .header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding-bottom: var(--space-24);
-      margin-bottom: var(--space-48);
-      border-bottom: 1px solid var(--color-border);
-    }
-    .header-title {
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .tabs { display: flex; gap: var(--space-24); }
-    .tab-btn {
-      background: none; border: none;
-      font-family: var(--font-sans); font-size: 13px;
-      color: var(--color-secondary); cursor: pointer;
-      padding-bottom: 4px; border-bottom: 2px solid transparent;
-    }
-    .tab-btn.active { color: var(--color-primary); border-bottom: 2px solid var(--color-accent); }
-    
-    .section-title {
-      font-size: 14px; font-weight: 600; letter-spacing: 0.08em;
-      text-transform: uppercase; margin-bottom: var(--space-24);
-    }
-    
-    .section-spacing { margin-bottom: var(--space-48); }
-
-    /* CONSULTA DOCENTE */
-    .search-row { display: flex; width: 100%; margin-bottom: var(--space-8); }
-    .search-input {
-      flex: 1; height: 40px; padding: 0 var(--space-16);
-      border: 1px solid var(--color-primary);
-      font-family: var(--font-sans); font-size: 14px; outline: none;
-      border-radius: 0;
-    }
-    .search-btn {
-      height: 40px; padding: 0 var(--space-32);
-      background: var(--color-primary); color: #fff;
-      border: none; font-family: var(--font-sans); font-size: 14px;
-      cursor: pointer; border-radius: 0;
-    }
-    .search-btn:hover { background: var(--color-accent); }
-    .search-result { font-size: 13px; line-height: 1.5; color: var(--color-primary); }
-
-    /* ANTIGÜEDAD */
-    .antiguedad-row {
-      display: flex; align-items: baseline; gap: var(--space-32);
-      margin-bottom: var(--space-16);
-    }
-    .ant-block { display: flex; flex-direction: column; padding-right: var(--space-32); }
-    .ant-block:not(:last-child) { border-right: 1px solid var(--color-border); }
-    .ant-val { font-size: 64px; font-weight: 200; color: var(--color-primary); line-height: 1; }
-    .ant-lbl { font-size: 11px; text-transform: uppercase; color: var(--color-secondary); margin-top: var(--space-8); letter-spacing: 0.1em; }
-    .ant-footer { font-size: 13px; color: var(--color-secondary); }
-
-    /* TABLES */
-    .table { width: 100%; border-collapse: collapse; }
-    .table th {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-secondary);
-      font-weight: 400; text-align: left; padding: var(--space-16) 0;
-      border-bottom: 1px solid var(--color-border);
-    }
-    .table td {
-      font-size: 13px; color: var(--color-primary); padding: var(--space-16) 0;
-      border-bottom: 1px solid var(--color-border-light);
-    }
-    .table-compact td, .table-compact th { padding: 8px 0; height: 36px; }
-    .table-footer td { border-top: 2px solid var(--color-primary); font-weight: 600; border-bottom: none; }
-    
-    .text-toggle { float: right; font-size: 11px; text-transform: uppercase; cursor: pointer; color: var(--color-secondary); letter-spacing: 0.08em; background: none; border: none; font-family: var(--font-sans); padding: 0; }
-    .text-toggle.active { color: var(--color-primary); }
-    .text-toggle-danger { font-size: 11px; text-transform: uppercase; cursor: pointer; color: #cc0000; letter-spacing: 0.08em; background: none; border: none; font-family: var(--font-sans); padding: 0; }
-
-    /* AGENTES LIST */
-    .agentes-list { margin-top: var(--space-24); }
-    .section-divider { border: none; border-top: 1px solid var(--color-border); margin: var(--space-32) 0; }
-    .agente-card {
-      padding: var(--space-12) 0;
-      border-bottom: 1px solid var(--color-border-light);
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .agente-card:hover .agente-card-dni { color: var(--color-accent); }
-    .agente-card.active .agente-card-dni { color: var(--color-accent); }
-    .agente-card-dni { font-size: 15px; font-weight: 500; }
-    .agente-card-meta { font-size: 11px; color: var(--color-secondary); line-height: 1.5; }
-    .agente-card-stat { font-size: 11px; color: var(--color-secondary); }
-    .agentes-empty {
-      padding: var(--space-32) 0; text-align: center;
-      color: var(--color-secondary); font-size: 13px; line-height: 1.5;
-    }
-    .agentes-empty svg { width: 32px; height: 32px; margin-bottom: var(--space-16); }
-
-    /* PAGINACIÓN */
-    .pagination { display: flex; align-items: center; justify-content: space-between; margin-top: var(--space-16); font-size: 11px; color: var(--color-secondary); }
-    .pagination-info { }
-    .pagination-btns { display: flex; gap: var(--space-8); }
-    .pagination-btn {
-      font-family: var(--font-sans); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
-      background: none; border: 1px solid var(--color-border); padding: 4px 12px; cursor: pointer; color: var(--color-primary);
-    }
-    .pagination-btn:disabled { opacity: 0.3; cursor: default; }
-    .pagination-btn:not(:disabled):hover { border-color: var(--color-primary); }
-
-    /* DOCUMENTOS */
-    .dropzone { border: 1px dashed var(--color-secondary); padding: var(--space-48); text-align: center; cursor: pointer; margin-bottom: var(--space-24); }
-    .dropzone-text { font-size: 13px; color: var(--color-secondary); }
-    .dropzone input { display: none; }
-    
-    .docs-list { display: flex; flex-direction: column; gap: var(--space-12); }
-    .docs-item { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: var(--space-8); border-bottom: 1px solid var(--color-border-light); }
-    .docs-item-info { display: flex; flex-direction: column; gap: 2px; }
-    .docs-item-name { font-size: 13px; color: var(--color-primary); }
-    .docs-date { font-size: 11px; color: var(--color-secondary); }
-    
-    /* UTILS */
-    .hidden { display: none !important; }
-    .hidden.visible { display: block !important; }
-    .date-link { color: var(--color-accent); text-decoration: none; }
-    .date-link:hover { text-decoration: underline; }
-    
-    .icon-tooltip { position: relative; cursor: help; color: var(--color-primary); text-decoration: none; }
-    .icon-tooltip::after {
-      content: attr(data-tooltip); position: absolute; bottom: 100%; left: 0;
-      background: var(--color-primary); color: #fff; padding: 4px 8px; font-size: 11px;
-      white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s; margin-bottom: 4px;
-    }
-    .icon-tooltip:hover::after { opacity: 1; }
-    
-    .row-active td { color: var(--color-accent); }
-    
-    /* ALERTS */
-    .alert { font-size: 13px; margin-bottom: var(--space-24); padding: var(--space-16); display: none; }
-    .alert-success { border-left: 2px solid var(--color-primary); display: block; }
-    .alert-error { border-left: 2px solid #cc0000; color: #cc0000; display: block; }
-    
-    /* MODAL */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); display: none; align-items: center; justify-content: center; z-index: 100; }
-    .modal-overlay.visible { display: flex; }
-    .modal { width: 100%; max-width: 500px; padding: var(--space-48); border: 1px solid var(--color-border); background: #fff; }
-    .modal h3 { font-size: 14px; font-weight: 600; text-transform: uppercase; margin-bottom: var(--space-24); letter-spacing: 0.08em; }
-    .modal p { font-size: 13px; margin-bottom: var(--space-32); color: var(--color-secondary); }
-    .modal-actions { display: flex; gap: var(--space-24); justify-content: flex-end; }
-    .modal-actions button {
-      font-family: var(--font-sans); font-size: 13px;
-      background: none; border: none; cursor: pointer; padding: 0;
-      text-transform: uppercase; letter-spacing: 0.08em;
-    }
-    .modal-actions button:hover { opacity: 0.6; }
-    .modal-actions .btn-cancel { color: var(--color-secondary); }
-    .modal-actions .btn-cancel:hover { color: var(--color-primary); opacity: 1; }
-    .modal-actions .btn-danger { color: #cc0000; }
-    .modal-actions .btn-primary { color: var(--color-primary); }
-    
-    /* GRÁFICO */
-    .modal-wide { max-width: 900px !important; }
-    .grafico { font-size: 12px; overflow-x: auto; min-width: 600px; }
-    .grafico-wrap { min-width: 600px; }
-    .grafico-escala { position: relative; height: 28px; margin: 0 0 var(--space-8) 0; border-bottom: 1px solid var(--color-border); }
-    .grafico-marca { position: absolute; top: 0; font-size: 10px; color: var(--color-secondary); transform: translateX(-50%); white-space: nowrap; }
-    .grafico-marca::before { content: ""; position: absolute; top: 14px; left: 50%; width: 1px; height: 6px; background: var(--color-border); }
-    .grafico-track { display: flex; align-items: center; min-height: 32px; margin-bottom: 2px; }
-    .grafico-track-label { width: 100px; flex-shrink: 0; font-size: 11px; color: var(--color-secondary); padding-right: var(--space-8); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .grafico-track-bars { position: relative; flex: 1; height: 26px; }
-    .grafico-bar {
-      position: absolute; top: 4px; height: 18px; border-radius: 2px;
-      cursor: pointer; transition: opacity 0.15s; min-width: 4px;
-      display: flex; align-items: center; padding: 0 4px;
-      font-size: 9px; color: #fff; overflow: hidden; white-space: nowrap;
-    }
-    .grafico-bar:hover { opacity: 0.75; }
-    .grafico-leyenda { display: flex; flex-wrap: wrap; gap: var(--space-16); margin-top: var(--space-16); padding-top: var(--space-16); border-top: 1px solid var(--color-border-light); }
-    .grafico-leyenda-item { display: flex; align-items: center; gap: var(--space-8); font-size: 11px; color: var(--color-secondary); }
-    .grafico-leyenda-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-    .grafico-vacio { padding: var(--space-48); text-align: center; color: var(--color-secondary); font-size: 13px; }
-
-    /* LOADING */
-    .loading { display: none; margin-bottom: var(--space-24); font-size: 13px; color: var(--color-secondary); }
-
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <div class="app">
     <div class="col-12 header-row">
-      <div class="header-title">Legajo Digital</div>
-      <div class="tabs">
-        <button class="tab-btn active" data-page="inicio" onclick="irAPagina('inicio')">Inicio</button>
-        <button class="tab-btn" data-page="detalle" onclick="irAPagina('detalle')">Detalle</button>
-      </div>
+      <span id="backNav" class="back-btn hidden" onclick="irAPagina('inicio')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </span>
+      <div class="header-title" onclick="irAPagina('inicio')" style="cursor:pointer">Legajo Digital</div>
     </div>
 
     <!-- ALERTS -->
@@ -316,98 +63,102 @@
         <div id="detalleHeader" class="detalle-header">
           <div style="display:flex;justify-content:space-between;align-items:baseline">
             <div id="detalleDni" class="detalle-header-dni">Seleccioná un docente</div>
-            <span class="text-toggle-danger" onclick="confirmClearAgente()">Limpiar datos</span>
+            <div style="display:flex;gap:var(--space-16)">
+              <span class="text-toggle" onclick="confirmReprocesar()">Reprocesar</span>
+              <span class="text-toggle-danger" onclick="confirmClearAgente()">Limpiar datos</span>
+            </div>
           </div>
           <div id="detalleMeta" class="detalle-header-meta"></div>
         </div>
 
-        <!-- DOCUMENTOS -->
+        <!-- ANTIGÜEDAD -->
         <div class="section-spacing">
-          <h2 class="section-title" style="cursor:pointer" onclick="showInfoModal()" title="Ver detección de campos">Documentos <span id="docsCount" style="font-weight:400;color:var(--color-secondary)"></span></h2>
-          <div id="dropzone" class="dropzone" onclick="document.getElementById('fileInput').click()">
-            <div class="dropzone-text">Arrastrá o seleccioná un archivo — PDF, DOCX o XLSX</div>
-            <input id="fileInput" type="file" accept=".pdf,.xlsx,.xls,.docx" />
+          <div class="antiguedad-row">
+            <div class="ant-block">
+              <span class="ant-val" id="netoYears">—</span>
+              <span class="ant-lbl">Años</span>
+            </div>
+            <div class="ant-block">
+              <span class="ant-val" id="netoMonths">—</span>
+              <span class="ant-lbl">Meses</span>
+            </div>
+            <div class="ant-block">
+              <span class="ant-val" id="netoDaysDetail">—</span>
+              <span class="ant-lbl">Días</span>
+            </div>
           </div>
+          <div class="ant-footer"><span id="netoTotalDias">—</span> días hábiles <span id="badgeSinLic" style="display:none">/ sin desc. licencias</span></div>
+        </div>
+
+        <!-- SUB NAV -->
+        <div id="detalleSubNav" style="display:flex;justify-content:center;gap:var(--space-16);padding:var(--space-16) 0 var(--space-24);font-size:12px;text-transform:uppercase;letter-spacing:0.08em" class="hidden">
+          <span class="tab-btn active" data-detalle-tab="documentos" onclick="irADetalleTab('documentos')">Documentos</span>
+          <span style="color:var(--color-secondary)">|</span>
+          <span class="tab-btn" data-detalle-tab="licencias" onclick="irADetalleTab('licencias')">Licencias</span>
+          <span style="color:var(--color-secondary)">|</span>
+          <span class="tab-btn" data-detalle-tab="periodos" onclick="irADetalleTab('periodos')">Períodos</span>
+        </div>
+
+        <!-- DOCUMENTOS TAB -->
+        <div id="detalleTabDocumentos" class="detalle-tab section-spacing">
+          <h2 class="section-title" style="cursor:pointer" onclick="showInfoModal()" title="Ver detección de campos">Documentos <span id="docsCount" style="font-weight:400;color:var(--color-secondary)"></span></h2>
           <div id="loading" class="loading">Procesando...</div>
           <div id="docsPanel" class="hidden">
             <div class="docs-list" id="docsListBody"></div>
           </div>
         </div>
 
-        <!-- ANTIGÜEDAD -->
-      <div class="section-spacing">
-        <h2 class="section-title">Antigüedad <span class="text-toggle" onclick="confirmReprocesar()">Reprocesar</span></h2>
-        <div class="antiguedad-row">
-          <div class="ant-block">
-            <span class="ant-val" id="netoYears">—</span>
-            <span class="ant-lbl">Años</span>
-          </div>
-          <div class="ant-block">
-            <span class="ant-val" id="netoMonths">—</span>
-            <span class="ant-lbl">Meses</span>
-          </div>
-          <div class="ant-block">
-            <span class="ant-val" id="netoDaysDetail">—</span>
-            <span class="ant-lbl">Días</span>
-          </div>
-        </div>
-        <div class="ant-footer"><span id="netoTotalDias">—</span> días hábiles <span id="badgeSinLic" style="display:none">/ sin desc. licencias</span></div>
-      </div>
-
-      <!-- DESGLOSE -->
-      <div class="section-spacing">
-        <h2 class="section-title">Desglose por Situación de Revista <span id="breakdownCount" style="font-weight:400;color:var(--color-secondary)"></span></h2>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Situación</th>
-              <th>Antigüedad</th>
-              <th>Años</th>
-              <th>Meses</th>
-              <th>Días</th>
-            </tr>
-          </thead>
-          <tbody id="breakdownBody"></tbody>
-          <tfoot id="breakdownFooter"></tfoot>
-        </table>
-      </div>
-
-      <!-- LICENCIAS -->
-      <div id="licenciasSection" class="section-spacing" style="display:none">
-        <h2 class="section-title">
-          Licencias Descontadas <span id="licenciasCount" style="font-weight:400;color:var(--color-secondary)"></span>
-          <span class="text-toggle" id="toggleLicenciasText" onclick="toggleDescontarLicencias()">Descontar [ <span id="toggleLicenciasState">ON</span> ]</span>
-        </h2>
-        <input type="checkbox" id="toggleLicencias" style="display:none" onchange="updateToggleText()">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Inicio</th>
-              <th>Fin</th>
-              <th>Días</th>
-              <th>Motivo</th>
-            </tr>
-          </thead>
-          <tbody id="licenciasBody"></tbody>
-        </table>
-      </div>
-
-      <!-- LEGAJO -->
-      <div class="section-spacing">
-        <h2 class="section-title" style="display:flex;align-items:baseline;justify-content:space-between">Historial de Períodos <span id="legajoCount" style="font-weight:400;color:var(--color-secondary)"></span><button class="tab-btn" onclick="abrirGrafico()" style="text-transform:none;letter-spacing:0">Ver gráfico</button></h2>
-        <table class="table table-compact">
-          <thead>
-            <tr>
-              <th>Inicio</th>
-              <th>Fin</th>
-              <th>Situación</th>
-              <th>Origen</th>
-              <th style="text-align: right">Días</th>
-            </tr>
+        <!-- PERIODOS TAB -->
+        <div id="detalleTabPeriodos" class="detalle-tab section-spacing" style="display:none">
+          <h2 class="section-title">Desglose por Situación de Revista <span id="breakdownCount" style="font-weight:400;color:var(--color-secondary)"></span></h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Situación</th>
+                <th>Antigüedad</th>
+                <th>Años</th>
+                <th>Meses</th>
+                <th>Días</th>
+              </tr>
             </thead>
-          <tbody id="legajoBody"></tbody>
-        </table>
-      </div>
+            <tbody id="breakdownBody"></tbody>
+            <tfoot id="breakdownFooter"></tfoot>
+          </table>
+
+          <h2 class="section-title" style="margin-top:var(--space-32)">Historial de Períodos <span id="legajoCount" style="font-weight:400;color:var(--color-secondary)"></span><button class="tab-btn" onclick="abrirGrafico()" style="text-transform:none;letter-spacing:0;float:right">Ver gráfico</button></h2>
+          <table class="table table-compact">
+            <thead>
+              <tr>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Situación</th>
+                <th>Origen</th>
+                <th style="text-align: right">Días</th>
+              </tr>
+            </thead>
+            <tbody id="legajoBody"></tbody>
+          </table>
+        </div>
+
+        <!-- LICENCIAS TAB -->
+        <div id="detalleTabLicencias" class="detalle-tab section-spacing" style="display:none">
+          <h2 class="section-title">
+            Licencias Descontadas <span id="licenciasCount" style="font-weight:400;color:var(--color-secondary)"></span>
+            <span class="text-toggle" id="toggleLicenciasText" onclick="toggleDescontarLicencias()">Descontar [ <span id="toggleLicenciasState">ON</span> ]</span>
+          </h2>
+          <input type="checkbox" id="toggleLicencias" style="display:none" onchange="updateToggleText()">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Días</th>
+                <th>Motivo</th>
+              </tr>
+            </thead>
+            <tbody id="licenciasBody"></tbody>
+          </table>
+        </div>
 
     </div></div>
 
@@ -458,786 +209,6 @@
     </div>
   </div>
 
-  <script>
-    // ========================================================================
-    // STATE
-    // ========================================================================
-
-    let currentDni = null;
-    let lastData = null;
-    let allAgentes = [];
-    let currentPage = 1;
-    const PAGE_SIZE = 10;
-
-    // ========================================================================
-    // UTILITIES
-    // ========================================================================
-
-    function formatAntiguedad(obj) {
-      if (!obj) return "0";
-      return ((obj.years + obj.months / 12 + obj.days / 360) * 100) / 100;
-    }
-
-    function daysBetween(inicio, fin) {
-      const [y1, m1, d1] = inicio.split("-").map(Number);
-      const [y2, m2, d2] = fin.split("-").map(Number);
-      const start = Date.UTC(y1, m1 - 1, d1);
-      const end = Date.UTC(y2, m2 - 1, d2);
-      const diffTime = Math.abs(end - start);
-      const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-      return diffDays + 1;
-    }
-
-    function formatYearsMonthsDays(obj) {
-      if (!obj) return "\u2014";
-      return `${obj.years || 0}a ${obj.months || 0}m ${obj.days || 0}d`;
-    }
-
-    function formatDate(iso) {
-      if (!iso) return "\u2014";
-      const [y, m, d] = iso.split("-");
-      return `${d}/${m}/${y}`;
-    }
-
-    function formatDateFromEpoch(ms) {
-      const d = new Date(ms);
-      const pad = (n) => String(n).padStart(2, "0");
-      return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-    }
-
-    function showAlert(message, type) {
-      const id = type === "success" ? "alertSuccess" : "alertError";
-      const el = document.getElementById(id);
-      el.textContent = message;
-      el.classList.remove("hidden");
-      setTimeout(() => { el.classList.add("hidden"); }, 5000);
-    }
-
-    // Hide alerts initially
-    document.getElementById("alertSuccess").classList.add("hidden");
-    document.getElementById("alertError").classList.add("hidden");
-
-    // ========================================================================
-    // RENDER RESULTS
-    // ========================================================================
-
-    function renderResults(data, mode) {
-      lastData = data;
-      const isView = mode === "view";
-      const calc = data.natural;
-
-      // Teacher info headers
-      const infoEl = document.getElementById("searchResultText");
-      const dniStr = data.dni.replace(/^(\d{2})(\d{3})(\d{3})$/, "$1.$2.$3");
-      const infoHtml = isView
-        ? `DNI ${data.dni}<br>${data.nombre || ""} ${data.totalRecords} período${data.totalRecords !== 1 ? "s" : ""}`
-        : `DNI ${data.dni}<br>${data.recordsProcessed} procesado${data.recordsProcessed !== 1 ? "s" : ""} / ${data.totalRecords} total`;
-      infoEl.innerHTML = infoHtml;
-      document.getElementById("detalleDni").textContent = `DNI ${dniStr}`;
-      document.getElementById("detalleMeta").textContent = `${data.totalRecords} período${data.totalRecords !== 1 ? "s" : ""} · ${data.licencias?.length || 0} licencia${data.licencias?.length !== 1 ? "s" : ""}`;
-      // Totals — just neto
-      document.getElementById("netoYears").textContent = calc.neto.years;
-      document.getElementById("netoMonths").textContent = calc.neto.months;
-      document.getElementById("netoDaysDetail").textContent = calc.neto.days;
-      document.getElementById("netoTotalDias").textContent = calc.neto.total;
-      document.getElementById("badgeSinLic").style.display =
-        data.descontarLicencias === false ? "" : "none";
-
-      // Sync toggle state
-      const toggleEl = document.getElementById("toggleLicencias");
-      if (toggleEl) {
-        toggleEl.checked = data.descontarLicencias !== false;
-        document.getElementById("toggleLicenciasState").textContent = toggleEl.checked ? "ON" : "OFF";
-      }
-
-      // Licencias
-      const licencias = data.licencias || [];
-      const licenciasSection = document.getElementById("licenciasSection");
-      const licenciasBody = document.getElementById("licenciasBody");
-      licenciasBody.innerHTML = "";
-      if (licencias.length > 0) {
-        licenciasSection.style.display = "";
-        document.getElementById("licenciasCount").textContent = licencias.length + " licencia" + (licencias.length !== 1 ? "s" : "");
-        for (const lic of licencias) {
-          const dias = daysBetween(lic.inicio, lic.fin);
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${formatDate(lic.inicio)}</td>
-            <td>${formatDate(lic.fin)}</td>
-            <td>${dias}</td>
-            <td style="color:var(--color-secondary)">${lic.motivo || "—"}</td>
-          `;
-          licenciasBody.appendChild(row);
-        }
-      } else {
-        licenciasSection.style.display = "none";
-      }
-
-      // Breakdown by role
-      const breakdownBody = document.getElementById("breakdownBody");
-      breakdownBody.innerHTML = "";
-      const roles = Object.entries(calc.byRole);
-      document.getElementById("breakdownCount").textContent = roles.length + " situación" + (roles.length !== 1 ? "es" : "");
-
-      for (const [situacion, ant] of roles) {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${situacion}</td>
-          <td class="text-accent">${formatAntiguedad(ant).toFixed(2)}</td>
-          <td>${ant.years}</td>
-          <td>${ant.months}</td>
-          <td>${ant.days}</td>
-        `;
-        breakdownBody.appendChild(row);
-      }
-
-      if (roles.length === 0) {
-        breakdownBody.innerHTML = `<tr><td colspan="5" style="color:var(--color-secondary);">Sin datos</td></tr>`;
-        document.getElementById("breakdownFooter").innerHTML = "";
-      } else {
-        document.getElementById("breakdownFooter").innerHTML = `
-          <tr class="table-footer">
-            <td>TOTAL</td>
-            <td class="text-accent">${formatAntiguedad(calc.neto).toFixed(2)}</td>
-            <td>${calc.neto.years}</td>
-            <td>${calc.neto.months}</td>
-            <td>${calc.neto.days}</td>
-          </tr>
-        `;
-      }
-
-      // Legajo (same regardless of mode)
-      const legajoBody = document.getElementById("legajoBody");
-      legajoBody.innerHTML = "";
-      document.getElementById("legajoCount").textContent = data.legajo.length + " registro" + (data.legajo.length !== 1 ? "s" : "");
-
-      for (const period of data.legajo) {
-        const dias = daysBetween(period.inicio, period.fin);
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td><a href="#" class="date-link">${formatDate(period.inicio)}</a></td>
-          <td><a href="#" class="date-link">${formatDate(period.fin)}</a></td>
-          <td class="text-accent">${period.situacion_revista || "—"}</td>
-          <td style="font-size:11px;color:var(--color-secondary);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${period.origen}">${period.origen}</td>
-          <td style="text-align: right">${dias}</td>
-        `;
-        legajoBody.appendChild(row);
-      }
-    }
-
-    // ========================================================================
-    // UPLOAD
-    // ========================================================================
-
-    async function uploadFile(file) {
-      document.getElementById("loading").style.display = "block";
-      const loadingInicio = document.getElementById("loadingInicio");
-      if (loadingInicio) loadingInicio.style.display = "block";
-
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const response = await fetch("/procesar", {
-          method: "POST",
-          body: formData,
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Error al procesar el archivo");
-        }
-
-        currentDni = data.dni;
-        renderResults(data, "upload");
-        highlightCard(data.dni);
-        document.getElementById("dniSearch").value = data.dni;
-        showAlert(
-          `Documento procesado: ${data.recordsAdded} per\u00edodo(s) añadido(s)`,
-          "success"
-        );
-        loadAgentesList();
-        loadDocumentos(data.dni);
-        irAPagina("detalle");
-      } catch (error) {
-        showAlert(`Error: ${error.message}`, "error");
-      } finally {
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("loadingInicio").style.display = "none";
-      }
-    }
-
-    // ========================================================================
-    // SEARCH & TEACHERS
-    // ========================================================================
-
-    async function searchAgente() {
-      const input = document.getElementById("dniSearch");
-      const q = input.value.trim().replace(/\./g, "");
-      currentPage = 1;
-      if (!q || q.length < 2) {
-        renderAgentesPage();
-        return;
-      }
-      const filtered = allAgentes.filter(a => {
-        const dni = (a.dni || "").replace(/\./g, "");
-        return dni.includes(q);
-      });
-      renderAgentesPage(filtered);
-    }
-
-    async function loadAgente(dni) {
-      document.getElementById("loading").style.display = "block";
-
-      try {
-        const response = await fetch(`/agente/${dni}`);
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Docente no encontrado");
-        }
-
-        currentDni = dni;
-        renderResults(data, "view");
-        highlightCard(dni);
-        document.getElementById("docsPanel").classList.remove("visible");
-        await loadDocumentos(dni);
-        irAPagina("detalle");
-      } catch (error) {
-        showAlert(`Error: ${error.message}`, "error");
-      } finally {
-        document.getElementById("loading").style.display = "none";
-      }
-    }
-
-    function highlightCard(dni) {
-      document.querySelectorAll(".agente-card").forEach((card) => {
-        card.classList.toggle("active", card.dataset.dni === dni);
-      });
-    }
-
-    async function loadAgentesList() {
-      try {
-        const response = await fetch("/agentes");
-        const data = await response.json();
-
-        allAgentes = data.agentes || [];
-        currentPage = 1;
-        renderAgentesPage();
-      } catch (error) {
-        console.error("Error al cargar docentes:", error);
-        document.getElementById("agentesGrid").innerHTML = `
-          <div class="agentes-empty">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-            <div>Error al cargar la lista de docentes</div>
-          </div>
-        `;
-      }
-    }
-
-    function renderAgentesPage(source) {
-      const grid = document.getElementById("agentesGrid");
-      const countEl = document.getElementById("agentesCount");
-      const pagEl = document.getElementById("agentesPagination");
-      const list = source || allAgentes;
-
-      if (!list || list.length === 0) {
-        grid.innerHTML = !allAgentes || allAgentes.length === 0
-          ? `
-          <div class="agentes-empty">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-              <polyline points="14 2 14 8 20 8"/>
-            </svg>
-            <div>Todav\u00eda no hay docentes registrados.<br>Sub\u00ed un PDF o Excel para empezar.</div>
-          </div>`
-          : `<div class="agentes-empty"><div>Sin resultados para ese DNI</div></div>`;
-        countEl.textContent = source ? "0 resultados" : "Sin registros";
-        pagEl.innerHTML = "";
-        return;
-      }
-
-      const total = list.length;
-      const totalPages = Math.ceil(total / PAGE_SIZE);
-      const start = (currentPage - 1) * PAGE_SIZE;
-      const end = Math.min(start + PAGE_SIZE, total);
-      const page = list.slice(start, end);
-
-      countEl.textContent = `${total} docente${total !== 1 ? "s" : ""}`;
-
-      grid.innerHTML = "";
-      for (const agente of page) {
-        const card = document.createElement("div");
-        card.className = "agente-card";
-        card.dataset.dni = agente.dni;
-
-        const calc = agente.natural;
-        const diasEnAnio = 365;
-        const anios = ((calc?.neto?.total || 0) / diasEnAnio).toFixed(1);
-        card.innerHTML = `
-          <div class="agente-card-dni">${agente.dni}</div>
-          <div class="agente-card-meta">
-            ${agente.totalRecords} per\u00edodo${agente.totalRecords !== 1 ? "s" : ""} &middot; ${anios} a&ntilde;os netos<br>
-            ${formatDate(agente.primerPeriodo)} &rarr; ${formatDate(agente.ultimoPeriodo)}
-          </div>
-          <span class="agente-card-stat">${agente.documentos} documento${agente.documentos !== 1 ? "s" : ""}</span>
-        `;
-
-        card.addEventListener("click", () => {
-          loadAgente(agente.dni);
-          document.getElementById("dniSearch").value = agente.dni;
-        });
-
-        if (agente.dni === currentDni) {
-          card.classList.add("active");
-        }
-
-        grid.appendChild(card);
-      }
-
-      pagEl.innerHTML = `
-        <span class="pagination-info">${start + 1}\u2013${end} de ${total}</span>
-        <div class="pagination-btns">
-          <button class="pagination-btn" onclick="goToPage(${currentPage - 1})" ${currentPage <= 1 ? "disabled" : ""}>Anterior</button>
-          <button class="pagination-btn" onclick="goToPage(${currentPage + 1})" ${currentPage >= totalPages ? "disabled" : ""}>Siguiente</button>
-        </div>
-      `;
-    }
-
-    function goToPage(page) {
-      const input = document.getElementById("dniSearch");
-      const q = input.value.trim().replace(/\./g, "");
-      const list = q.length >= 2
-        ? allAgentes.filter(a => (a.dni || "").replace(/\./g, "").includes(q))
-        : allAgentes;
-      const totalPages = Math.ceil(list.length / PAGE_SIZE);
-      if (page < 1 || page > totalPages) return;
-      currentPage = page;
-      renderAgentesPage(list);
-    }
-
-    // ========================================================================
-    // PAGE NAVIGATION
-    // ========================================================================
-
-    function irAPagina(page) {
-      document.querySelectorAll(".tab-btn").forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.page === page);
-      });
-      document.querySelectorAll(".page").forEach((p) => {
-        p.classList.toggle("active", p.id === "page-" + page);
-      });
-    }
-
-    function updateToggleText() {
-      const toggleEl = document.getElementById("toggleLicencias");
-      document.getElementById("toggleLicenciasState").textContent = toggleEl.checked ? "ON" : "OFF";
-    }
-
-    async function toggleDescontarLicencias() {
-      const toggleEl = document.getElementById("toggleLicencias");
-      toggleEl.checked = !toggleEl.checked;
-      updateToggleText();
-      const enabled = toggleEl.checked;
-      
-      if (!lastData) return;
-      const dni = lastData.dni;
-      try {
-        const res = await fetch(`/agente/${dni}/config`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ descontarLicencias: enabled }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error);
-        renderResults(data, lastData.recordsProcessed !== undefined ? "upload" : "view");
-      } catch (e) {
-        showAlert("Error al cambiar configuración: " + e.message, "error");
-        toggleEl.checked = !enabled;
-      }
-    }
-
-    // ========================================================================
-    // MODAL DE CONFIRMACIÓN
-    // ========================================================================
-
-    let modalCallback = null;
-
-    function showModal(title, message, confirmLabel, callback) {
-      document.getElementById("modalTitle").textContent = title;
-      document.getElementById("modalMessage").textContent = message;
-      document.getElementById("modalConfirmBtn").textContent = confirmLabel || "Confirmar";
-      document.getElementById("confirmModal").classList.add("visible");
-      modalCallback = callback;
-    }
-
-    function closeModal() {
-      document.getElementById("confirmModal").classList.remove("visible");
-      modalCallback = null;
-    }
-
-    function showInfoModal() {
-      document.getElementById("infoModal").classList.add("visible");
-    }
-
-    function closeInfoModal() {
-      document.getElementById("infoModal").classList.remove("visible");
-    }
-
-    // Cerrar info modal con Escape
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") { closeInfoModal(); cerrarGrafico(); }
-    });
-
-    // ========================================================================
-    // GRÁFICO DE LÍNEA DE TIEMPO
-    // ========================================================================
-
-    const SIT_COLORS = {
-      "TITULAR": "#444",
-      "SUPLENTE": "#777",
-      "PROVISIONAL": "#999",
-    };
-    function getColor(sit) {
-      return SIT_COLORS[sit] || "#aaa";
-    }
-
-    function abrirGrafico() {
-      if (!lastData || !lastData.legajo || lastData.legajo.length === 0) return;
-      document.getElementById("graficoModal").classList.add("visible");
-      renderGrafico(lastData.legajo);
-    }
-
-    function cerrarGrafico() {
-      document.getElementById("graficoModal").classList.remove("visible");
-    }
-
-    function renderGrafico(legajo) {
-      const body = document.getElementById("graficoBody");
-      if (!legajo || legajo.length === 0) {
-        body.innerHTML = '<div class="grafico-vacio">Sin períodos para mostrar</div>';
-        return;
-      }
-
-      function normalizar(sit) {
-        if (!sit) return "SIN ESPECIFICAR";
-        const s = sit.toUpperCase().trim();
-        if (s === "TITULAR INTERINO" || s === "INTERINO") return "TITULAR";
-        return s;
-      }
-
-      const sorted = [...legajo].sort((a, b) => a.inicio.localeCompare(b.inicio));
-      const minDate = sorted[0].inicio;
-      const maxDate = sorted.reduce((mx, p) => (p.fin > mx ? p.fin : mx), sorted[0].fin);
-      const totalMs = new Date(maxDate) - new Date(minDate) || 1;
-
-      // Agrupar por situación normalizada
-      const groups = {};
-      for (const p of sorted) {
-        const sit = normalizar(p.situacion_revista);
-        if (!groups[sit]) groups[sit] = [];
-        groups[sit].push(p);
-      }
-
-      const order = ["TITULAR", "SUPLENTE", "PROVISIONAL"];
-      const trackSits = Object.keys(groups).sort((a, b) => {
-        const ia = order.indexOf(a);
-        const ib = order.indexOf(b);
-        return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
-      });
-
-      // Escala: marcas cada 1 año
-      const scaleMarks = [];
-      const startYear = new Date(minDate).getFullYear();
-      const endYear = new Date(maxDate).getFullYear();
-      for (let y = startYear; y <= endYear; y++) {
-        const mark = `${y}-01-01`;
-        scaleMarks.push(mark);
-      }
-
-      function pct(dateStr) {
-        const ms = new Date(dateStr) - new Date(minDate);
-        return (ms / totalMs) * 100;
-      }
-
-      let html = '<div class="grafico"><div class="grafico-wrap">';
-
-      // Escala
-      html += '<div class="grafico-escala">';
-      for (const mark of scaleMarks) {
-        const pos = pct(mark);
-        const [y] = mark.split("-");
-        html += `<span class="grafico-marca" style="left:${pos}%">${y}</span>`;
-      }
-      html += "</div>";
-
-      // Tracks por situación con packing greedy por solapamiento
-      for (const sit of trackSits) {
-        const periods = groups[sit];
-        const subTracks = [];
-        for (const p of periods) {
-          let placed = false;
-          for (const track of subTracks) {
-            const last = track[track.length - 1];
-            if (p.inicio > last.fin) { track.push(p); placed = true; break; }
-          }
-          if (!placed) subTracks.push([p]);
-        }
-        for (const track of subTracks) {
-          html += '<div class="grafico-track">';
-          html += '<div class="grafico-track-bars">';
-          for (const p of track) {
-            const left = pct(p.inicio);
-            const w = Math.max(((new Date(p.fin) - new Date(p.inicio)) / totalMs) * 100, 0.5);
-            const color = getColor(sit);
-            const label = `${formatDate(p.inicio)}–${formatDate(p.fin)}`;
-            const title = `${sit} | ${label} | ${p.origen || "—"}`;
-            html += `<div class="grafico-bar" style="left:${left}%;width:${w}%;background:${color}" title="${title}">${w > 8 ? label : ""}</div>`;
-          }
-          html += "</div></div>";
-        }
-      }
-
-      // Leyenda
-      html += '<div class="grafico-leyenda">';
-      for (const sit of trackSits) {
-        const color = getColor(sit);
-        html += `<div class="grafico-leyenda-item"><span class="grafico-leyenda-swatch" style="background:${color}"></span>${sit}</div>`;
-      }
-      html += "</div>";
-
-      html += "</div></div>";
-      body.innerHTML = html;
-    }
-
-    // ========================================================================
-    // GESTIÓN DE DOCUMENTOS
-    // ========================================================================
-
-    async function loadDocumentos(dni) {
-      const panel = document.getElementById("docsPanel");
-      const list = document.getElementById("docsListBody");
-      const count = document.getElementById("docsCount");
-      if (!panel) return;
-
-      try {
-        const response = await fetch(`/agente/${dni}/documentos`);
-        const data = await response.json();
-
-        if (!response.ok || !data.documentos || data.documentos.length === 0) {
-          panel.classList.remove("visible");
-          return;
-        }
-
-        panel.classList.add("visible");
-        count.textContent = `${data.documentos.length} doc${data.documentos.length !== 1 ? "s" : ""}`;
-        // Update detalle meta with doc count
-        const metaEl = document.getElementById("detalleMeta");
-        const periods = lastData ? `${lastData.totalRecords} período${lastData.totalRecords !== 1 ? "s" : ""}` : "";
-        const lic = lastData?.licencias ? `${lastData.licencias.length} licencia${lastData.licencias.length !== 1 ? "s" : ""}` : "";
-        const docs = `${data.documentos.length} doc${data.documentos.length !== 1 ? "s" : ""}`;
-        metaEl.textContent = [periods, lic, docs].filter(Boolean).join(" · ");
-
-        list.innerHTML = "";
-        for (const doc of data.documentos) {
-          const item = document.createElement("div");
-          const displayName = doc.displayName || doc.replace(/^\d+_/, "");
-          const uploadedAt = doc.uploadedAt;
-          const dniForBtn = dni;
-          const docForBtn = doc.name;
-          const tsHtml = uploadedAt
-            ? `<span class="docs-date" title="${new Date(uploadedAt).toLocaleString()}">${formatDateFromEpoch(uploadedAt)}</span>`
-            : `<span class="docs-date" style="color:var(--color-secondary)">—</span>`;
-          item.className = "docs-item";
-          item.innerHTML = `
-            <span class="docs-item-info">
-              <span class="docs-item-name">${displayName}</span>
-              ${tsHtml}
-            </span>
-          `;
-          const delBtn = document.createElement("button");
-          delBtn.className = "text-toggle text-toggle-danger";
-          delBtn.textContent = "Eliminar";
-          delBtn.addEventListener("click", () => confirmDeleteDocumento(dniForBtn, docForBtn));
-          item.appendChild(delBtn);
-          list.appendChild(item);
-        }
-      } catch {
-        panel.classList.remove("visible");
-      }
-    }
-
-    function confirmDeleteDocumento(dni, filename) {
-      showModal(
-        "Eliminar documento",
-        `¿Eliminar "${filename}" y sus registros asociados del legajo? Esta acción no se puede deshacer.`,
-        "Eliminar",
-        () => deleteDocumento(dni, filename)
-      );
-    }
-
-    async function deleteDocumento(dni, filename) {
-      try {
-        const response = await fetch(`/documento/${dni}/${encodeURIComponent(filename)}`, { method: "DELETE" });
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Error al eliminar");
-        }
-
-        showAlert(`Documento eliminado: ${data.registrosRemovidos} registro(s) removido(s)`, "success");
-
-        if (data.legajo) {
-          renderResults(data, "view");
-        } else {
-          irAPagina("inicio");
-        }
-
-        loadDocumentos(dni);
-        loadAgentesList();
-      } catch (error) {
-        showAlert(`Error: ${error.message}`, "error");
-      }
-    }
-
-    function confirmReprocesar() {
-      if (!currentDni) return;
-      showModal(
-        "Reprocesar documentos",
-        "¿Re-procesar todos los documentos? Esto reemplazará el legajo actual con datos extraídos desde cero.",
-        "Reprocesar",
-        () => reprocesarDocumentos(currentDni)
-      );
-    }
-
-    async function reprocesarDocumentos(dni) {
-      document.getElementById("loading").style.display = "block";
-
-      try {
-        const response = await fetch(`/reprocesar/${dni}`, { method: "POST" });
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Error al reprocesar");
-        }
-
-        renderResults(data, "upload");
-        showAlert(`Reprocesado: ${data.totalRecords} período(s) en total`, "success");
-        loadDocumentos(dni);
-        loadAgentesList();
-      } catch (error) {
-        showAlert(`Error: ${error.message}`, "error");
-      } finally {
-        document.getElementById("loading").style.display = "none";
-      }
-    }
-
-    function confirmClearAgente() {
-      if (!currentDni) return;
-      showModal(
-        "Limpiar datos",
-        `¿Eliminar TODOS los datos del agente DNI ${currentDni}? Se borrarán documentos y legajo. No se puede deshacer.`,
-        "Eliminar todo",
-        () => clearAgente(currentDni)
-      );
-    }
-
-    async function clearAgente(dni) {
-      try {
-        const response = await fetch(`/agente/${dni}`, { method: "DELETE" });
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Error al eliminar");
-        }
-
-        showAlert(`Datos del agente ${dni} eliminados`, "success");
-        irAPagina("docentes");
-        document.getElementById("docsPanel").classList.remove("visible");
-        currentDni = null;
-        lastData = null;
-        loadAgentesList();
-      } catch (error) {
-        showAlert(`Error: ${error.message}`, "error");
-      }
-    }
-
-    // ========================================================================
-    // EVENT LISTENERS
-    // ========================================================================
-
-    // Dropzone — detalle
-    const dropzone = document.getElementById("dropzone");
-    const fileInput = document.getElementById("fileInput");
-
-    dropzone.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      dropzone.classList.add("dragover");
-    });
-
-    dropzone.addEventListener("dragleave", () => {
-      dropzone.classList.remove("dragover");
-    });
-
-    dropzone.addEventListener("drop", (e) => {
-      e.preventDefault();
-      dropzone.classList.remove("dragover");
-      if (e.dataTransfer.files.length > 0) {
-        uploadFile(e.dataTransfer.files[0]);
-      }
-    });
-
-    fileInput.addEventListener("change", (e) => {
-      if (e.target.files.length > 0) {
-        uploadFile(e.target.files[0]);
-      }
-    });
-
-    // Dropzone — inicio
-    const dropzoneInicio = document.getElementById("dropzoneInicio");
-    const fileInputInicio = document.getElementById("fileInputInicio");
-
-    dropzoneInicio.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      dropzoneInicio.classList.add("dragover");
-    });
-
-    dropzoneInicio.addEventListener("dragleave", () => {
-      dropzoneInicio.classList.remove("dragover");
-    });
-
-    dropzoneInicio.addEventListener("drop", (e) => {
-      e.preventDefault();
-      dropzoneInicio.classList.remove("dragover");
-      if (e.dataTransfer.files.length > 0) {
-        uploadFile(e.dataTransfer.files[0]);
-      }
-    });
-
-    fileInputInicio.addEventListener("change", (e) => {
-      if (e.target.files.length > 0) {
-        uploadFile(e.target.files[0]);
-      }
-    });
-
-    // Search Enter key
-    document.getElementById("dniSearch").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") { searchAgente(); }
-    });
-
-    // Modal confirm button
-    document.getElementById("modalConfirmBtn").addEventListener("click", () => {
-      if (modalCallback) modalCallback();
-      closeModal();
-    });
-
-    // Initialize: load teachers
-    loadAgentesList();
-  </script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
