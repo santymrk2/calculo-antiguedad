@@ -1,0 +1,17 @@
+{
+  "name": "seem-much",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vp dev",
+    "build": "tsc && vp build",
+    "preview": "vp preview"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.2",
+    "vite": "^8.0.16",
+    "vite-plus": "^0.1.24"
+  },
+  "packageManager": "bun@1.2.9"
+}

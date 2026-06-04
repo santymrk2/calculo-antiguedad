@@ -4,23 +4,19 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Local data (mounted as volume at runtime)
+# Local data (mounted as volume)
 datos_locales/
 
 # Git
 .git
 .gitignore
-.gitattributes
 
 # Docker
 Dockerfile
 docker-compose.yml
 .dockerignore
 
-# Documentation
-README.md
-
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
@@ -36,3 +32,10 @@ run.bat
 
 # Old files
 old/
+
+# Frontend dev artifacts
+seem-much/node_modules/
+seem-much/dist/
+
+# Examples
+ejemplos/

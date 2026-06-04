@@ -13,5 +13,5 @@ services:
       - HOST=0.0.0.0
     restart: unless-stopped
     labels:
-      description: "Cálculo de Antigüedad Docente — PBA"
-      version: "1.0.0"
+      description: "Cálculo de Antigüedad Docente — PBA + Vite+"
+      version: "2.0.0"

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Legajo Digital — Antigüedad Docente</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <div class="app">
+    <div class="col-12 header-row">
+      <span id="backNav" class="back-btn hidden" onclick="irAPagina('inicio')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </span>
+      <div class="header-title" onclick="irAPagina('inicio')" style="cursor:pointer">Legajo Digital</div>
+    </div>
+
+    <!-- ALERTS -->
+    <div class="col-12">
+      <div id="alertSuccess" class="alert alert-success hidden"></div>
+      <div id="alertError" class="alert alert-error hidden"></div>
+    </div>
+
+    <!-- PAGE: INICIO -->
+    <div id="page-inicio" class="page active">
+      <div class="col-12 section-spacing">
+
+        <!-- DOCUMENTOS (UPLOAD) -->
+        <h2 class="section-title">Documentos</h2>
+        <div id="dropzoneInicio" class="dropzone" onclick="document.getElementById('fileInputInicio').click()">
+          <div class="dropzone-text">Arrastrá o seleccioná un archivo — PDF, DOCX o XLSX</div>
+          <input id="fileInputInicio" type="file" accept=".pdf,.xlsx,.xls,.docx" />
+        </div>
+        <div id="loadingInicio" class="loading">Procesando...</div>
+
+        <hr class="section-divider">
+
+        <h2 class="section-title">Consulta Docente</h2>
+        <div class="search-row">
+          <input id="dniSearch" class="search-input" type="text" inputmode="numeric" placeholder="Filtrar por DNI" maxlength="8" onkeyup="searchAgente()" />
+          <button id="btnSearch" class="search-btn" onclick="searchAgente()">Buscar</button>
+        </div>
+        <div id="searchResultText" class="search-result" style="display:none"></div>
+        <div class="agentes-list">
+          <div class="section-title" style="margin-top:var(--space-24);margin-bottom:var(--space-16)">Docentes <span id="agentesCount" style="font-weight:400;color:var(--color-secondary)"></span></div>
+          <div id="agentesGrid"></div>
+          <div id="agentesPagination" class="pagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: DETALLE -->
+    <div id="page-detalle" class="page">
+      <div class="col-12">
+
+        <!-- TEACHER HEADER -->
+        <div id="detalleHeader" class="detalle-header">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <div id="detalleDni" class="detalle-header-dni">Seleccioná un docente</div>
+            <div style="display:flex;gap:var(--space-16)">
+              <span class="text-toggle" onclick="confirmReprocesar()">Reprocesar</span>
+              <span class="text-toggle-danger" onclick="confirmClearAgente()">Limpiar datos</span>
+            </div>
+          </div>
+          <div id="detalleMeta" class="detalle-header-meta"></div>
+        </div>
+
+        <!-- ANTIGÜEDAD -->
+        <div class="section-spacing">
+          <div class="antiguedad-row">
+            <div class="ant-block">
+              <span class="ant-val" id="netoYears">—</span>
+              <span class="ant-lbl">Años</span>
+            </div>
+            <div class="ant-block">
+              <span class="ant-val" id="netoMonths">—</span>
+              <span class="ant-lbl">Meses</span>
+            </div>
+            <div class="ant-block">
+              <span class="ant-val" id="netoDaysDetail">—</span>
+              <span class="ant-lbl">Días</span>
+            </div>
+          </div>
+          <div class="ant-footer"><span id="netoTotalDias">—</span> días hábiles <span id="badgeSinLic" style="display:none">/ sin desc. licencias</span></div>
+        </div>
+
+        <!-- SUB NAV -->
+        <div id="detalleSubNav" style="display:flex;justify-content:center;gap:var(--space-16);padding:var(--space-16) 0 var(--space-24);font-size:12px;text-transform:uppercase;letter-spacing:0.08em" class="hidden">
+          <span class="tab-btn active" data-detalle-tab="documentos" onclick="irADetalleTab('documentos')">Documentos</span>
+          <span style="color:var(--color-secondary)">|</span>
+          <span class="tab-btn" data-detalle-tab="licencias" onclick="irADetalleTab('licencias')">Licencias</span>
+          <span style="color:var(--color-secondary)">|</span>
+          <span class="tab-btn" data-detalle-tab="periodos" onclick="irADetalleTab('periodos')">Períodos</span>
+        </div>
+
+        <!-- DOCUMENTOS TAB -->
+        <div id="detalleTabDocumentos" class="detalle-tab section-spacing">
+          <h2 class="section-title" style="cursor:pointer" onclick="showInfoModal()" title="Ver detección de campos">Documentos <span id="docsCount" style="font-weight:400;color:var(--color-secondary)"></span></h2>
+          <div id="loading" class="loading">Procesando...</div>
+          <div id="docsPanel" class="hidden">
+            <div class="docs-list" id="docsListBody"></div>
+          </div>
+        </div>
+
+        <!-- PERIODOS TAB -->
+        <div id="detalleTabPeriodos" class="detalle-tab section-spacing" style="display:none">
+          <h2 class="section-title">Desglose por Situación de Revista <span id="breakdownCount" style="font-weight:400;color:var(--color-secondary)"></span></h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Situación</th>
+                <th>Antigüedad</th>
+                <th>Años</th>
+                <th>Meses</th>
+                <th>Días</th>
+              </tr>
+            </thead>
+            <tbody id="breakdownBody"></tbody>
+            <tfoot id="breakdownFooter"></tfoot>
+          </table>
+
+          <h2 class="section-title" style="margin-top:var(--space-32)">Historial de Períodos <span id="legajoCount" style="font-weight:400;color:var(--color-secondary)"></span><button class="tab-btn" onclick="abrirGrafico()" style="text-transform:none;letter-spacing:0;float:right">Ver gráfico</button></h2>
+          <table class="table table-compact">
+            <thead>
+              <tr>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Situación</th>
+                <th>Origen</th>
+                <th style="text-align: right">Días</th>
+              </tr>
+            </thead>
+            <tbody id="legajoBody"></tbody>
+          </table>
+        </div>
+
+        <!-- LICENCIAS TAB -->
+        <div id="detalleTabLicencias" class="detalle-tab section-spacing" style="display:none">
+          <h2 class="section-title">
+            Licencias Descontadas <span id="licenciasCount" style="font-weight:400;color:var(--color-secondary)"></span>
+            <span class="text-toggle" id="toggleLicenciasText" onclick="toggleDescontarLicencias()">Descontar [ <span id="toggleLicenciasState">ON</span> ]</span>
+          </h2>
+          <input type="checkbox" id="toggleLicencias" style="display:none" onchange="updateToggleText()">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Días</th>
+                <th>Motivo</th>
+              </tr>
+            </thead>
+            <tbody id="licenciasBody"></tbody>
+          </table>
+        </div>
+
+    </div></div>
+
+    <!-- MODALS -->
+    <div id="confirmModal" class="modal-overlay">
+      <div class="modal">
+        <h3 id="modalTitle"></h3>
+        <p id="modalMessage"></p>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+          <button id="modalConfirmBtn" class="btn-danger">Confirmar</button>
+        </div>
+      </div>
+    </div>
+    
+    <div id="infoModal" class="modal-overlay">
+      <div class="modal" style="max-width:520px">
+        <h3 style="font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Detección de Campos</h3>
+        <div style="margin:var(--space-16)0;font-size:13px;line-height:1.6;color:var(--color-secondary)">
+          <p><strong>PDF</strong> — extrae por regex:</p>
+          <ul style="margin:var(--space-8)0 var(--space-16) var(--space-20);padding:0">
+            <li><code>SUPLENTE / TITULAR / PROVISIONAL / INTERINO</code></li>
+            <li><code>DEL dd/mm/aaaa AL dd/mm/aaaa</code></li>
+            <li><code>COMO [cargo]</code></li>
+          </ul>
+          <p><strong>Excel (.xlsx / .xls)</strong> — detecta columnas por nombre (insensible):</p>
+          <ul style="margin:var(--space-8)0 var(--space-16) var(--space-20);padding:0">
+            <li><code>inicio</code>, <code>fecha inicio</code>, <code>fecha_inicio</code></li>
+            <li><code>fin</code>, <code>fecha fin</code>, <code>fecha_fin</code></li>
+            <li><code>cargo</code></li>
+            <li><code>dni</code>, <code>documento</code></li>
+            <li><code>situacion_revista</code>, <code>situacion</code>, <code>tipo</code></li>
+          </ul>
+          <p>Fechas soportadas: <code>DD/MM/AAAA</code>, <code>DD-MM-AAAA</code>, <code>AAAA-MM-DD</code>, <code>AAAA/MM/DD</code>, número serial de Excel.</p>
+        </div>
+        <div class="modal-actions"><button class="btn-cancel" onclick="closeInfoModal()">Cerrar</button></div>
+      </div>
+    </div>
+    
+    <div id="graficoModal" class="modal-overlay">
+      <div class="modal modal-wide">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:var(--space-24)">
+          <h3 style="font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Línea de Tiempo — Períodos</h3>
+          <button class="btn-cancel" onclick="cerrarGrafico()" style="font-size:13px;text-transform:uppercase;letter-spacing:0.08em;background:none;border:none;cursor:pointer;font-family:var(--font-sans);color:var(--color-secondary)">Cerrar</button>
+        </div>
+        <div id="graficoBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/js/app.js"></script>
+</body>
+</html>

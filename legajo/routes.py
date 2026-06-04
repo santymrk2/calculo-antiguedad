@@ -16,28 +16,39 @@ from legajo.handlers import (
 )
 from legajo.config import DATA_DIR, PORT, HOST
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DIST_DIR = os.path.join(BASE_DIR, "seem-much", "dist")
+
 app = FastAPI(title="Legajo Digital")
+
+
+def serve_index():
+    paths = [
+        os.path.join(DIST_DIR, "index.html"),
+        os.path.join(BASE_DIR, "index.html"),
+    ]
+    for p in paths:
+        if os.path.exists(p):
+            with open(p, "r") as f:
+                return HTMLResponse(f.read())
+    return HTMLResponse("index.html not found", status_code=404)
+
+
+if os.path.isdir(DIST_DIR):
+    app.mount("/assets", StaticFiles(directory=os.path.join(DIST_DIR, "assets")), name="assets")
 
 
 @app.get("/")
 async def root():
-    html_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "index.html")
-    try:
-        with open(html_path, "r") as f:
-            return HTMLResponse(f.read())
-    except FileNotFoundError:
-        return HTMLResponse("index.html not found", status_code=404)
+    return serve_index()
 
 
 @app.get("/style.css")
 async def serve_css():
-    return FileResponse(
-        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "style.css"),
-        media_type="text/css",
-    )
-
-
-app.mount("/js", StaticFiles(directory="js"), name="js")
+    p = os.path.join(BASE_DIR, "style.css")
+    if os.path.exists(p):
+        return FileResponse(p, media_type="text/css")
+    return HTMLResponse("", status_code=204)
 
 
 @app.post("/procesar")
